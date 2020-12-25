@@ -29,12 +29,21 @@ def listcreater(data, sep, replace_old, replace_new):
 def checkcredentials(data_list):
     count = 0
     for entry in data_list:
-        if ("byr" and "iyr" and "eyr" and "hgt" and "hcl" and "ecl" and "pid" in entry):
+        if ("byr" in entry 
+        and "iyr" in entry 
+        and "eyr" in entry 
+        and "hgt" in entry
+        and "hcl" in entry
+        and "ecl" in entry
+        and "pid" in entry):
             count += 1
+    return count
 
 def main():
     data = read_data("advent_of_code_4.txt")
     data_list = listcreater(data, "\n\n", "\n", " ")
+    print(checkcredentials(data_list))
+    # print(len(data_list))
 
 if __name__ == "__main__":
     main()    
