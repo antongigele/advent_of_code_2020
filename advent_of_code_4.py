@@ -27,7 +27,10 @@ def listcreater(data, sep, replace_old, replace_new):
     # cid (Country ID)
 
 def checkcredentials(data_list):
-    pass
+    count = 0
+    for entry in data_list:
+        if ("byr" and "iyr" and "eyr" and "hgt" and "hcl" and "ecl" and "pid" in entry):
+            count += 1
 
 def main():
     data = read_data("advent_of_code_4.txt")
