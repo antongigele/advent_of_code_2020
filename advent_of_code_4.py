@@ -26,8 +26,9 @@ def listcreater(data, sep, replace_old, replace_new):
     # pid (Passport ID)
     # cid (Country ID)
 
-def checkcredentials(data_list):
-    count = 0
+def checkcredentials(data_list, check_additional_cred = False):
+    count_part1 = 0
+    count_part2 = 0
     for entry in data_list:
         if ("byr" in entry 
         and "iyr" in entry 
@@ -36,8 +37,19 @@ def checkcredentials(data_list):
         and "hcl" in entry
         and "ecl" in entry
         and "pid" in entry):
-            count += 1
-    return count
+            count_part1 += 1
+    if check_additional_cred == True:
+        for entry in data_list:
+            if ("byr" in entry 
+            and "iyr" in entry 
+            and "eyr" in entry 
+            and "hgt" in entry
+            and "hcl" in entry
+            and "ecl" in entry
+            and "pid" in entry):
+                pass
+            
+    return count_part1, count_part2
 
 def main():
     data = read_data("advent_of_code_4.txt")
