@@ -1,3 +1,5 @@
+import re
+
 def read_data(path):
     try:
         file = open(path,"r")
@@ -57,11 +59,30 @@ def create_dict(data_list):
 
     return dictlist
 
+def height(dict_entry):
+    if (re.search('cm$',dict['hgl']) is not None and int(dict['hgl'][:-2]) in range(150,193 + 1) == True
+    or re.search('in$',dict['hgl']) is not None and int(dict['hgl'][:-2]) in range(59,76 + 1) == True):
+        return True
+
+def check_additional_cred(dict_list):
+    count_part2 = 0
+    for dict in dict_list:
+        if ((len(dict['byr']) == 4 and 1920 < int(dict['byr']) < 2002)
+        and (len(dict['iyr']) == 4 and 2010 < int(dict['iyr']) < 2020)
+        and (len(dict['eyr']) == 4 and 2020 < int(dict['eyr']) < 2030)
+        and ()    
+        and (len(dict['hcl']) == 7 and re.search('^#[0-9a-f]{6}', dict['hcl']) is not None)
+        and (dict['ecl'] in {'amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth'})
+        and (len(dict['pid']) == 9 and re.search('^000', dict['pid']) is not None)
+        ):
+            pass
+
 def main():
     data = read_data("advent_of_code_4.txt")
     data_list = listcreater(data, "\n\n", "\n", " ")
-    # print(checkcredentials(data_list))
     dict_list = create_dict(data_list)
-    print(dict_list)
+    print(check_additional_cred(dict_list))
+
+
 if __name__ == "__main__":
     main()    
