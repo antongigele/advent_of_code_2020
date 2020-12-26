@@ -60,22 +60,29 @@ def create_dict(data_list):
     return dictlist
 
 def height(dict_entry):
-    if (re.search('cm$',dict['hgl']) is not None and int(dict['hgl'][:-2]) in range(150,193 + 1) == True
-    or re.search('in$',dict['hgl']) is not None and int(dict['hgl'][:-2]) in range(59,76 + 1) == True):
+    if (re.search('cm$',dict_entry) is not None and int(dict_entry[:-2]) in range(150,193 + 1) == True
+    or re.search('in$',dict_entry) is not None and int(dict_entry[:-2]) in range(59,76 + 1) == True):
         return True
 
 def check_additional_cred(dict_list):
     count_part2 = 0
     for dict in dict_list:
-        if ((len(dict['byr']) == 4 and 1920 < int(dict['byr']) < 2002)
-        and (len(dict['iyr']) == 4 and 2010 < int(dict['iyr']) < 2020)
-        and (len(dict['eyr']) == 4 and 2020 < int(dict['eyr']) < 2030)
-        and ()    
-        and (len(dict['hcl']) == 7 and re.search('^#[0-9a-f]{6}', dict['hcl']) is not None)
-        and (dict['ecl'] in {'amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth'})
-        and (len(dict['pid']) == 9 and re.search('^000', dict['pid']) is not None)
-        ):
-            pass
+        if ("byr" in dict 
+        and "iyr" in dict 
+        and "eyr" in dict 
+        and "hgt" in dict
+        and "hcl" in dict
+        and "ecl" in dict
+        and "pid" in dict):
+            if ((len(dict['byr']) == 4 and int(dict['byr']) in range(1920, 2002 + 1))
+            and (len(dict['iyr']) == 4 and int(dict['iyr']) in range(2010, 2020 + 1))
+            and (len(dict['eyr']) == 4 and int(dict['eyr']) in range(2020, 2030 + 1))
+            and (height(dict['hgt']) == True)
+            and (len(dict['hcl']) == 7 and re.search('^#[0-9a-f]{6}', dict['hcl']) is not None)
+            and (dict['ecl'] in {'amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth'})
+            and (len(dict['pid']) == 9 and re.search('^000', dict['pid']) is not None)):
+                count_part2 += 1
+    return count_part2            
 
 def main():
     data = read_data("advent_of_code_4.txt")
