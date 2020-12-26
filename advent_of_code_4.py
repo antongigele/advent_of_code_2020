@@ -60,9 +60,9 @@ def create_dict(data_list):
     return dictlist
 
 def height(dict_entry):
-    if (re.search('cm$',dict_entry) is not None and int(dict_entry[:-2]) in range(150,193 + 1) == True
-    or re.search('in$',dict_entry) is not None and int(dict_entry[:-2]) in range(59,76 + 1) == True):
-        return True
+    
+    return  ((((re.search('cm$',dict_entry) is not None) == True) and (int(dict_entry[:-2]) in range(150,193 + 1)))
+    or (((re.search('in$',dict_entry) is not None) == True) and (int(dict_entry[:-2]) in range(59,76 + 1))))
 
 def check_additional_cred(dict_list):
     count_part2 = 0
@@ -80,7 +80,7 @@ def check_additional_cred(dict_list):
             and (height(dict['hgt']) == True)
             and (len(dict['hcl']) == 7 and re.search('^#[0-9a-f]{6}', dict['hcl']) is not None)
             and (dict['ecl'] in {'amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth'})
-            and (len(dict['pid']) == 9 and re.search('^000', dict['pid']) is not None)):
+            and (len(dict['pid']) == 9 and re.search('[0-9]{9}', dict['pid']) is not None)):
                 count_part2 += 1
     return count_part2            
 
@@ -89,7 +89,7 @@ def main():
     data_list = listcreater(data, "\n\n", "\n", " ")
     dict_list = create_dict(data_list)
     print(check_additional_cred(dict_list))
-
+    print(height('167cm'))
 
 if __name__ == "__main__":
     main()    
