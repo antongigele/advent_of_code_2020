@@ -89,7 +89,6 @@ def main():
     data_list = listcreater(data, "\n\n", "\n", " ")
     dict_list = create_dict(data_list)
     print(check_additional_cred(dict_list))
-    print(height('167cm'))
 
 if __name__ == "__main__":
     main()    
