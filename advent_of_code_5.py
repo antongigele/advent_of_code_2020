@@ -23,10 +23,10 @@ def bin_to_dec(bin):
     return dec_num    
 
 def remover(seat_id_list, lower_bound, upper_bound):
-    for entry in seat_id_list:
-        if not (int(entry) in range(lower_bound, upper_bound + 1)):
-            seat_id_list.remove(entry)
-    return seat_id_list
+    removal_list = [entry for entry in seat_id_list if (int(entry) in range(lower_bound, upper_bound + 1))]
+
+    return removal_list
+    
 def main():
     data = read_data('advent_of_code_5.txt')
     cleaned_data = list_cleaner(data,'\n','') # remove "\n"
