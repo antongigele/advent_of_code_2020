@@ -26,9 +26,18 @@ def remover(seat_id_list, lower_bound, upper_bound):
     removal_list = [entry for entry in seat_id_list if (int(entry) in range(lower_bound, upper_bound + 1))]
 
     return removal_list
-    
+
+def detect_missings(removal_list, lower_bound, upper_bound):    
+    for i in range(lower_bound, upper_bound):
+        if i in removal_list:
+            pass
+        else:
+            return f"The ID: {i} does not exist in the list"
+            
 def main():
     data = read_data('advent_of_code_5.txt')
+
+    #---------part1---------#
     cleaned_data = list_cleaner(data,'\n','') # remove "\n"
     bin_data = list_cleaner(list_cleaner(list_cleaner(list_cleaner(cleaned_data,'B','1'),'F','0'),'L','0'),'R','1') # turn completely into binary
     
@@ -36,11 +45,13 @@ def main():
     dec_data_col = [bin_to_dec(int(entry[-3:])) for entry in bin_data] # convert from last 3rd position
 
     seat_id_list = [ row*8 + col for row, col in zip(dec_data_row, dec_data_col)] # multiply the two lists
+    
+    #---------part2---------#
     print(max(seat_id_list))
     print(min(seat_id_list))
 
-    smaller_list = remover(seat_id_list, 100, 800)
-    print(smaller_list)
+    removal_list = remover(seat_id_list, 100, 800)
+    print(detect_missings(removal_list, 100, 800))
 
 if __name__ == "__main__":
     main()     
