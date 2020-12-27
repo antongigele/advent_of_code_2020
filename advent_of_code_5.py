@@ -22,6 +22,11 @@ def bin_to_dec(bin):
         dec_num += int(binary)*2**(l-count) # turn any binary into decimal
     return dec_num    
 
+def remover(seat_id_list, lower_bound, upper_bound):
+    for entry in seat_id_list:
+        if not (int(entry) in range(lower_bound, upper_bound + 1)):
+            seat_id_list.remove(entry)
+    return seat_id_list
 def main():
     data = read_data('advent_of_code_5.txt')
     cleaned_data = list_cleaner(data,'\n','') # remove "\n"
@@ -30,9 +35,12 @@ def main():
     dec_data_row = [bin_to_dec(int(entry[:-3])) for entry in bin_data] # convert till last 3rd position
     dec_data_col = [bin_to_dec(int(entry[-3:])) for entry in bin_data] # convert from last 3rd position
 
-    seat_id_list = [ row*8 + col for row, col in zip(dec_data_row, dec_data_col)]
+    seat_id_list = [ row*8 + col for row, col in zip(dec_data_row, dec_data_col)] # multiply the two lists
     print(max(seat_id_list))
     print(min(seat_id_list))
+
+    smaller_list = remover(seat_id_list, 100, 800)
+    print(smaller_list)
 
 if __name__ == "__main__":
     main()     
