@@ -27,6 +27,12 @@ class Dictionary:
         alphabet_dict = {letter : self.buchstabe for letter in Dictionary.alphabet}
         return alphabet_dict
 
+def count_group_size(count_data):
+    count = 0
+    count_list = [entry.count('\n') + 1 for entry in count_data]
+
+    return count_list
+
 def count_questions_part1(data_list):
     l = 0
     for entry in data_list:
@@ -34,20 +40,30 @@ def count_questions_part1(data_list):
 
     return l    
 
-def count_questions_part2(data_list):
+def count_questions_part2(data_list, group_size_list):
     l = 0
-    for entry in data_list:
-        mydict = Dictionary().dict_creater()
-        len(entry)
-
+    interrupt = 0
+    for question_entry, size_entry in zip(data_list, group_size_list):
+        question_dict = Dictionary().dict_creater()
+        for letter in question_entry:
+            if letter in question_dict:
+                question_dict[letter] += 1
+        for key in question_dict:        
+            if size_entry == question_dict[key]:
+                # print(size_entry,key)
+                l += 1    
+        interrupt += 1
+        if interrupt == 9:
+            break        
+    return l
 
 def main():
     data = read_data('advent_of_code_6.txt')
+    count_data = listcreater(data, '\n\n')
     data_list = listcreater(data, '\n\n', '\n', '')
-    # print(count_questions_part1(data_list))
-    mydict = Dictionary('k')
-    mydict = mydict.dict_creater()
-    print(mydict)
+    group_size_list = count_group_size(count_data)
+    print(count_questions_part2(data_list, group_size_list))
+    
 
 if __name__ == '__main__':
     main()             
