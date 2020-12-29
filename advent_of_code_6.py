@@ -58,8 +58,13 @@ def count_questions_part2(data_list, group_size_list):
 
 def main():
     data = read_data('advent_of_code_6.txt')
-    count_data = listcreater(data, '\n\n')
     data_list = listcreater(data, '\n\n', '\n', '')
+
+    #---------------part1--------------#
+    print(count_questions_part1(data_list))
+
+    #---------------part2--------------#
+    count_data = listcreater(data, '\n\n')
     group_size_list = count_group_size(count_data)
     print(count_questions_part2(data_list, group_size_list))
     
