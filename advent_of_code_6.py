@@ -18,7 +18,7 @@ def listcreater(data, sep, replace_old = None, replace_new = None):
     return sep_list
 
 class Dictionary:
-    alphabet = ['a','b','c','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+    alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
 
     def __init__(self, buchstabe = 0):
         self.buchstabe = buchstabe
@@ -42,19 +42,18 @@ def count_questions_part1(data_list):
 
 def count_questions_part2(data_list, group_size_list):
     l = 0
-    interrupt = 0
     for question_entry, size_entry in zip(data_list, group_size_list):
         question_dict = Dictionary().dict_creater()
         for letter in question_entry:
             if letter in question_dict:
                 question_dict[letter] += 1
+                
+        # print(question_entry)            
         for key in question_dict:        
             if size_entry == question_dict[key]:
                 # print(size_entry,key)
                 l += 1    
-        interrupt += 1
-        if interrupt == 9:
-            break        
+                   
     return l
 
 def main():
