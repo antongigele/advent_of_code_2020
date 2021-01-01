@@ -1,11 +1,11 @@
 # #!/bin/bash
 
-# while read line || [ -n "$line" ] ;
-#     do 
-#         array[$i]="$line"
-#         let i++ ;
+while read line || [ -n "$line" ] ;
+    do 
+        array[$i]="$line"
+        let i++ ;
 
-#     done < advent_of_code_7.txt    
+    done < text.txt
 # for ((i=0;i<=20;i++))
 #     do
 #         for word in ${array[i]}
@@ -16,67 +16,80 @@
 #         #     num=$(($i + 1))
 #         #     echo "There it is in line ${num}";
 #         # fi
-            
 #     done
-# k=0;
-# for ((i=0;i<=${#array[@]};i++))
-#     do  
-#         if [[ ${array[$i]} == *"shiny gold bags"* ]]; then
-#             shiny_gold_bag_arr[$k]="${array[$i]}"
-#             let k++;
-#         fi   
-#     done   
+c=0;
+for ((i=0;i<=${#array[@]};i++))
+    do  
+        if [[ ${array[$i]} == *"shiny gold bag"* ]] ; then
+            shiny_gold_bag_arr[$c]="${array[$i]}"
+            let c++;
+        fi   
+    done   
 
 # ( IFS=$'\n'; echo "${shiny_gold_bag_arr[*]}" ) # das array ausgeben
 #--------------------------------------------------------------------------------
-string="muted coral bags contain 1 vibrant teal bag, 5 dim tan bags, 4 light bronze bags." 
-IFS=' ' read -r -a stringarray <<< "$string"
+# string="muted coral bags contain 1 vibrant teal bag, 5 dim tan bags, 4 light bronze bags." 
+# IFS=' ' read -r -a stringarray <<< "$string"
 
-# for ((i=0;i<=${#stringarray[@]};i++))
-#     do  
-#         if [ $i -lt 3 ] || [ $i -gt 3 ]; then
-#             echo "${stringarray[i]}"  
-#         fi     
-#     done
-
-# for ((i=0;i<=${#stringarray[@]};i++))
-#     do  
-#         num=$(($i + 1))
-#         if [ ${stringarray[$i]} == "shiny" ] && [ ${stringarray[$num]} == "gold" ]; then
-#             break
-#         elif [ $i -lt 3 ] || [ $i -gt 3 ]; then
-#             echo "${stringarray[i]}"    
-#         else 
-#             echo "no useful entry"     
-#         fi     
-#     done 
-for ((i=0;i<=${#stringarray[@]};i++))
+for ((i=0;i<=${#shiny_gold_bag_arr[@]};i++))
+do
+    k=0;
+    IFS=' ' read -r -a stringarray <<< "${shiny_gold_bag_arr[$i]}"
+    for ((j=0;j<=${#stringarray[@]};j++))
     do  
-        numplus=$(($i + 1))
-        numplustwo=$(($i + 2))
-        if [[ ${stringarray[$i]} == "shiny" ]] && [[ ${stringarray[$numplus]} == "gold" ]]; then
+        numplus=$(($j + 1))
+        numplustwo=$(($j + 2))
+        if [[ ${stringarray[$j]} == "shiny" ]] && [[ ${stringarray[$numplus]} == "gold" ]]; then
             break
         else
-            # echo "${stringarray[$i]} ${stringarray[$numplus]}"
-            valid_bags+=( "${stringarray[$i]} ${stringarray[$numplus]} ${stringarray[$numplustwo]}" )      
+            valid_bags+=( "${stringarray[$j]} ${stringarray[$numplus]} ${stringarray[$numplustwo]}" )      
         fi     
-    done  
-
-( IFS=$'\n'; echo "${valid_bags[*]}" )
-
-k=0;
-for ((i=0;i<=${#valid_bags[@]};i++))
-    do  
-        if [[ "${valid_bags[$i]}" == *"bags" ]] \
-        || [[ "${valid_bags[$i]}" == *"bag" ]] \
-        || [[ "${valid_bags[$i]}" == *"bags," ]] \
-        || [[ "${valid_bags[$i]}" == *"bag," ]] \
-        || [[ "${valid_bags[$i]}" == *"bags." ]] \
-        || [[ "${valid_bags[$i]}" == *"bag." ]]; then
-            valid_bags_cleaned[$k]="${valid_bags[$i]}"
-            let k++;
-        fi   
     done
+    # ( IFS=$'\n'; echo "${valid_bags[*]}" )
+    
+    for ((l=0;l<=${#valid_bags[@]};l++))
+        do  
+            if [[ "${valid_bags[$l]}" == *"bags" ]] \
+            || [[ "${valid_bags[$l]}" == *"bag" ]] \
+            || [[ "${valid_bags[$l]}" == *"bags," ]] \
+            || [[ "${valid_bags[$l]}" == *"bag," ]] \
+            || [[ "${valid_bags[$l]}" == *"bags." ]] \
+            || [[ "${valid_bags[$l]}" == *"bag." ]]; then
+                valid_bags_cleaned[$k]="${valid_bags[$l]}"
+                let k++;
+            fi   
+        done
 
-( IFS=$'\n'; echo "${valid_bags_cleaned[*]}" )    
-# grep -q "bags" <<< "${valid_bags[$i]}"
+done    
+( IFS=$'\n'; echo "${valid_bags_cleaned[*]}" )
+# ( IFS=$'\n'; echo "${valid_bags[*]}" )
+
+# for ((i=0;i<=${#stringarray[@]};i++))
+#     do  
+#         numplus=$(($i + 1))
+#         numplustwo=$(($i + 2))
+#         if [[ ${stringarray[$i]} == "shiny" ]] && [[ ${stringarray[$numplus]} == "gold" ]]; then
+#             break
+#         else
+#             # echo "${stringarray[$i]} ${stringarray[$numplus]}"
+#             valid_bags+=( "${stringarray[$i]} ${stringarray[$numplus]} ${stringarray[$numplustwo]}" )      
+#         fi     
+#     done  
+
+# ( IFS=$'\n'; echo "${valid_bags[*]}" )
+
+# k=0;
+# for ((i=0;i<=${#valid_bags[@]};i++))
+#     do  
+#         if [[ "${valid_bags[$i]}" == *"bags" ]] \
+#         || [[ "${valid_bags[$i]}" == *"bag" ]] \
+#         || [[ "${valid_bags[$i]}" == *"bags," ]] \
+#         || [[ "${valid_bags[$i]}" == *"bag," ]] \
+#         || [[ "${valid_bags[$i]}" == *"bags." ]] \
+#         || [[ "${valid_bags[$i]}" == *"bag." ]]; then
+#             valid_bags_cleaned[$k]="${valid_bags[$i]}"
+#             let k++;
+#         fi   
+#     done
+
+# ( IFS=$'\n'; echo "${valid_bags_cleaned[*]}" )
