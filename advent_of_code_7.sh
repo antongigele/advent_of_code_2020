@@ -54,14 +54,29 @@ for ((i=0;i<=${#stringarray[@]};i++))
     do  
         numplus=$(($i + 1))
         numplustwo=$(($i + 2))
-        if [ ${stringarray[$i]} == "shiny" ] && [ ${stringarray[$numplus]} == "gold" ]; then
+        if [[ ${stringarray[$i]} == "shiny" ]] && [[ ${stringarray[$numplus]} == "gold" ]]; then
             break
-        elif [ $i -lt 3 ] || [ $i -gt 3 ]; then
+        else
             # echo "${stringarray[$i]} ${stringarray[$numplus]}"
-            valid_bags+=( "${stringarray[$i]} ${stringarray[$numplus]} ${stringarray[$numplustwo]}" ) 
-        else 
-            echo "no useful entry"     
+            valid_bags+=( "${stringarray[$i]} ${stringarray[$numplus]} ${stringarray[$numplustwo]}" )      
         fi     
     done  
 
-( IFS=$'\n'; echo "${valid_bags[*]}" )      
+( IFS=$'\n'; echo "${valid_bags[*]}" )
+
+k=0;
+for ((i=0;i<=${#valid_bags[@]};i++))
+    do  
+        if [[ "${valid_bags[$i]}" == *"bags" ]] \
+        || [[ "${valid_bags[$i]}" == *"bag" ]] \
+        || [[ "${valid_bags[$i]}" == *"bags," ]] \
+        || [[ "${valid_bags[$i]}" == *"bag," ]] \
+        || [[ "${valid_bags[$i]}" == *"bags." ]] \
+        || [[ "${valid_bags[$i]}" == *"bag." ]]; then
+            valid_bags_cleaned[$k]="${valid_bags[$i]}"
+            let k++;
+        fi   
+    done
+
+( IFS=$'\n'; echo "${valid_bags_cleaned[*]}" )    
+# grep -q "bags" <<< "${valid_bags[$i]}"
