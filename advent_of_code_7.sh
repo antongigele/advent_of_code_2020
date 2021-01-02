@@ -1,27 +1,28 @@
-# #!/bin/bash
+#!/bin/bash
 
 while read line || [ -n "$line" ] ;
     do 
-        array[$i]="$line"
+        line_array[$i]="$line"
         let i++ ;
 
-    done < text.txt
+    done < advent_of_code_7.txt
+    # done < text.txt
 # for ((i=0;i<=20;i++))
 #     do
-#         for word in ${array[i]}
+#         for word in ${line_array[i]}
 #             do
 #                 echo ${word}
 #             done    
-#         # if [[ ${array[i]} == *"shiny gold bags"* ]]; then
+#         # if [[ ${line_array[i]} == *"shiny gold bags"* ]]; then
 #         #     num=$(($i + 1))
 #         #     echo "There it is in line ${num}";
 #         # fi
 #     done
 c=0;
-for ((i=0;i<=${#array[@]};i++))
+for ((i=0;i<=${#line_array[@]};i++))
     do  
-        if [[ ${array[$i]} == *"shiny gold bag"* ]] ; then
-            shiny_gold_bag_arr[$c]="${array[$i]}"
+        if [[ ${line_array[$i]} == *"shiny gold bag"* ]] ; then # schauen ob zeile "shiny gold bag" enthält
+            shiny_gold_bag_arr[$c]="${line_array[$i]}"
             let c++;
         fi   
     done   
@@ -45,7 +46,7 @@ do
             valid_bags+=( "${stringarray[$j]} ${stringarray[$numplus]} ${stringarray[$numplustwo]}" )      
         fi     
     done
-    # ( IFS=$'\n'; echo "${valid_bags[*]}" )
+    ( IFS=$'\n'; echo "${valid_bags[*]}" )
     
     for ((l=0;l<=${#valid_bags[@]};l++))
         do  
@@ -61,35 +62,43 @@ do
         done
 
 done    
+# ( IFS=$'\n'; echo "${valid_bags[*]}" )
+# "." "," und "s" müssen vom ende entfernt werden
+for ((l=0;l<=${#valid_bags_cleaned[@]};l++))
+do  
+    if [[ "${valid_bags_cleaned[l]: -1}" == "s" ]] \
+    || [[ "${valid_bags_cleaned[l]: -1}" == "," ]] \
+    || [[ "${valid_bags_cleaned[l]: -1}" == "." ]]; then
+        valid_bags_cleaned[$l]="${valid_bags_cleaned[l]:: -1}";
+        # echo "${valid_bags_cleaned[l]}"
+    fi    
+done
+# den loop zweimal laufen lassen damit auch die "s" vor dem "," oder "." entfernt werden
+for ((l=0;l<=${#valid_bags_cleaned[@]};l++))
+do  
+    if [[ "${valid_bags_cleaned[l]: -1}" == "s" ]] \
+    || [[ "${valid_bags_cleaned[l]: -1}" == "," ]] \
+    || [[ "${valid_bags_cleaned[l]: -1}" == "." ]]; then
+        valid_bags_cleaned[$l]="${valid_bags_cleaned[l]:: -1}";
+        # echo "${valid_bags_cleaned[l]}"
+    fi    
+done   
 ( IFS=$'\n'; echo "${valid_bags_cleaned[*]}" )
-# ( IFS=$'\n'; echo "${valid_bags[*]}" )
 
-# for ((i=0;i<=${#stringarray[@]};i++))
-#     do  
-#         numplus=$(($i + 1))
-#         numplustwo=$(($i + 2))
-#         if [[ ${stringarray[$i]} == "shiny" ]] && [[ ${stringarray[$numplus]} == "gold" ]]; then
-#             break
-#         else
-#             # echo "${stringarray[$i]} ${stringarray[$numplus]}"
-#             valid_bags+=( "${stringarray[$i]} ${stringarray[$numplus]} ${stringarray[$numplustwo]}" )      
-#         fi     
-#     done  
+valid_counter=0;
+for ((l=0;l<${#valid_bags_cleaned[@]};l++))
+do
+    key_regex="${valid_bags_cleaned[l]}";
+    for ((k=0;k<${#line_array[@]};k++))
+    do
+        if [[ "${line_array[k]}" == *"$key_regex"* ]]; then
+            let valid_counter++;
+            echo "key_regex detected"
+            line_array[k]="This array-entry has been deleted";
+        fi
+    done
+done
 
-# ( IFS=$'\n'; echo "${valid_bags[*]}" )
-
-# k=0;
-# for ((i=0;i<=${#valid_bags[@]};i++))
-#     do  
-#         if [[ "${valid_bags[$i]}" == *"bags" ]] \
-#         || [[ "${valid_bags[$i]}" == *"bag" ]] \
-#         || [[ "${valid_bags[$i]}" == *"bags," ]] \
-#         || [[ "${valid_bags[$i]}" == *"bag," ]] \
-#         || [[ "${valid_bags[$i]}" == *"bags." ]] \
-#         || [[ "${valid_bags[$i]}" == *"bag." ]]; then
-#             valid_bags_cleaned[$k]="${valid_bags[$i]}"
-#             let k++;
-#         fi   
-#     done
-
-# ( IFS=$'\n'; echo "${valid_bags_cleaned[*]}" )
+echo $valid_counter
+( IFS=$'\n'; echo "${valid_bags_cleaned[*]}" ) > output.txt
+# ( IFS=$'\n'; echo "${line_array[*]}" )
