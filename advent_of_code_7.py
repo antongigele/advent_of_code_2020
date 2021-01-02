@@ -34,10 +34,10 @@ def put_bags_inside(valid_bag_lst, data):
 
 def main():
     data = read_data("advent_of_code_7_2.txt")
-    # part1-----------------------------
+    #------------------part1-------------------
     valid_bag_lst = get_first_valid_bag(data)
     print(valid_bag_lst)
     print(put_bags_inside(valid_bag_lst, data))
-    #-----------------------------------
+    #------------------------------------------
 if __name__ == "__main__":
     main()
