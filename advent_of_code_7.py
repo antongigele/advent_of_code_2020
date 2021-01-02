@@ -16,7 +16,11 @@ def get_first_valid_bag(data):
         if "shiny gold bag" in line:
             splitted_three = line.split()
             if not (splitted_three[0] == "shiny" and splitted_three[1] == "gold"):
-                valid_bag_lst.append(splitted_three[0]+" "+splitted_three[1]+" "+splitted_three[2])
+                if splitted_three[2][-1:] == "s":
+                    valid_bag_lst.append(splitted_three[0]+" "+splitted_three[1]+" "+splitted_three[2][:-1])
+                else:
+                    valid_bag_lst.append(splitted_three[0]+" "+splitted_three[1]+" "+splitted_three[2])
+
     return valid_bag_lst
 
 def put_bags_inside(valid_bag_lst, data):
@@ -29,7 +33,7 @@ def put_bags_inside(valid_bag_lst, data):
     return count
 
 def main():
-    data = read_data("text.txt")
+    data = read_data("advent_of_code_7_2.txt")
     # part1-----------------------------
     valid_bag_lst = get_first_valid_bag(data)
     print(valid_bag_lst)
