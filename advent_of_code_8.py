@@ -27,15 +27,16 @@ def command_runner(data, count_dict):
             splitted_line = data[i].split()
             acc += int(splitted_line[1])
             count_dict[i] = count_dict[i] + 1
-            print(acc)
+            # print(acc)
             i += 1
         elif "jmp" in data[i] and count_dict[i] == 0:
             splitted_line = data[i].split()
             count_dict[i] = count_dict[i] + 1
             i += int(splitted_line[1])
+            # print(int(splitted_line[1]))
         else:
-            i += 1       
-    return acc, count_dict
+            break       
+    return acc
 
 def main():
     data = read_data("advent_of_code_8.txt")
