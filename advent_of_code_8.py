@@ -14,9 +14,7 @@ def count_dict(data):
 
     return command_count_dict    
 
-def command_runner(data, count_dict):
-    # for line in data:
-        
+def command_runner_part1(data, count_dict):
     i = 0
     acc = 0
     while True:
@@ -38,11 +36,18 @@ def command_runner(data, count_dict):
             break       
     return acc
 
+def command_runner_part2(data, count_dict):
+    i = 0
+    acc = 0
+    while i < len(data):
+        print(data[i])
+
 def main():
     data = read_data("advent_of_code_8.txt")
 #-------------------part1---------------------#
     count_command_dict = count_dict(data)
-    print(command_runner(data, count_command_dict))
+    print(command_runner_part1(data, count_command_dict))
+#-------------------part2---------------------#
 
 if __name__ == "__main__":
     main()        
