@@ -19,7 +19,7 @@ def command_runner(data, count_dict):
         
     i = 0
     acc = 0
-    while i < len(data):
+    while True:
         if "nop" in data[i] and count_dict[i] == 0:
             count_dict[i] = count_dict[i] + 1
             i += 1
