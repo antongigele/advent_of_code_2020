@@ -71,7 +71,7 @@ def find_exitpoints(data):
             break    
         jumpout += 1
     return exitpoints      
-# please improve command_runner_part2 or exit_point_connect, there is still something missing
+
 def command_runner_part2(data, count_dict):
     j = 0
     acc = 0
@@ -119,7 +119,7 @@ def command_runner_part2(data, count_dict):
 
     return acc, ende
 
-def exit_point_connect(data_list):
+def exit_point_connect_part2(data_list):
     zeros_dict = count_dict(data_list) # neues dict mit nur nullen als values
     used_and_unused_entries_dict = command_runner_part1(data_list, zeros_dict)[0] #part1 durchlaufen lassen um zu sehen welche commands ausserhalb der schleife liegen im dictionary
     loop_indices = command_runner_part1(data_list, count_dict(data_list))[2] # zeros_dict geht hier aus irgendeinem Grund nicht
@@ -131,15 +131,16 @@ def exit_point_connect(data_list):
             # print(data_list[i] + " to")
             data_list[i] = "jmp " + splitted_line[1] # nop durch jmp ersetzen und probieren
             # print(data_list[i])
-            print(command_runner_part2(data_list, count_dict(data_list)))
+            if command_runner_part2(data_list, count_dict(data_list))[1] == True:
+                print(command_runner_part2(data_list, count_dict(data_list)))
             data_list[i] = "nop " + splitted_line[1] # jmp wieder auf nop zuruecksetzen
         elif splitted_line[0] == "jmp":
             # print(data_list[i] + " to")
             data_list[i] = "nop " + splitted_line[1]
             # print(data_list[i])
-            print(command_runner_part2(data_list, count_dict(data_list)))
+            if command_runner_part2(data_list, count_dict(data_list))[1] == True:
+                print(command_runner_part2(data_list, count_dict(data_list)))
             data_list[i] = "jmp " + splitted_line[1]
-        # print(str((int(splitted_line[1]))) + " " + str(i) + " = " + str((int(splitted_line[1]) + i)))    
 
     loop_size = sum(1 for value in used_and_unused_entries_dict.values() if value == 1)
 
@@ -149,7 +150,7 @@ def main():
 #-------------------part1---------------------#    
     # print(command_runner_part1(data_list, count_dict(data))[1])
 #-------------------part2---------------------#
-    print(exit_point_connect(data))
+    print(exit_point_connect_part2(data))
 
 
 if __name__ == "__main__":
