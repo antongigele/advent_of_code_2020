@@ -9,6 +9,18 @@ def read_data(path):
     file.close()
     return data
 
+def listcreater(data, sep = None, replace_old = None, replace_new = None):
+    if sep is not None:
+        sep_list = data.split(sep)
+        if replace_old is not None:
+            for e in range(len(sep_list)):
+                sep_list[e] = sep_list[e].replace(replace_old, replace_new)
+        return sep_list        
+    else:
+        for e in range(len(data)):
+            data[e] = data[e].replace(replace_old, replace_new)          
+        return data
+
 def count_dict(data):
     command_count_dict = {i : 0 for i in range(len(data))}
 
@@ -57,21 +69,28 @@ def find_exitpoints(data):
             # print(data[i] + "ist Ausstiegspunkt")
             count_exitpoints += 1
         else:
+            print("Kein Ende in Sicht.")
             break    
         jumpout += 1
     return exitpoints      
 
-def exit_point_connect(data):
-    zeros_dict = count_dict(data) # neues dict mit nur nullen als values
-    used_and_unused_entries_dict = command_runner_part1(data, zeros_dict)[0] #part1 durchlaufen lassen um zu sehen welche commands ausserhalb der schleife liegen im dictionary
-    exit_points = find_exitpoints(data) # Ausstiegspunkte wiedergeben als liste
-    loop_indices = command_runner_part1(data, zeros_dict)[2]
-    # for k, v in used_and_unused_entries_dict.items():
-    #     if k == "jmp" and v in exit_points:
-    #         print(k)
-    print(command_runner_part1(data, zeros_dict)[2]) # is printing an empty list for some reason!
-    # for i in lo_indices:
-    #     print(data[i])op
+def exit_point_connect(data_list):
+    zeros_dict = count_dict(data_list) # neues dict mit nur nullen als values
+    used_and_unused_entries_dict = command_runner_part1(data_list, zeros_dict)[0] #part1 durchlaufen lassen um zu sehen welche commands ausserhalb der schleife liegen im dictionary
+    exit_points = find_exitpoints(data_list) # Ausstiegspunkte wiedergeben als liste
+    loop_indices = command_runner_part1(data_list, count_dict(data_list))[2] # zeros_dict geht hier aus irgendeinem Grund nicht
+    for i in loop_indices:
+        splitted_line = data_list[i].split()
+        if splitted_line[0] == "acc":
+            pass
+        elif splitted_line[0] == "nop" and (int(splitted_line[1]) + i) in exit_points:
+            print("nop auf jmp aendern empfohlen")
+        # else:
+        #     if splitted_line[0] == "nop":
+        #         data_list[i] = "jmp " + splitted_line[1]
+        #         command_runner_part1(data_list, zeros_dict)
+        # print(str((int(splitted_line[1]))) + " " + str(i) + " = " + str((int(splitted_line[1]) + i)))    
+
 
     loop_size = sum(1 for value in used_and_unused_entries_dict.values() if value == 1)
 
@@ -79,11 +98,16 @@ def exit_point_connect(data):
     
     # print(command_runner_part1(data, count_command_dict)) 
 
+
+
+
+
 def main():
     data = read_data("advent_of_code_8.txt")
+    data_list = listcreater(data, None, "\n", "")
     count_command_dict = count_dict(data)
 #-------------------part1---------------------#    
-    # print(command_runner_part1(data, count_command_dict))
+    # print(command_runner_part1(data_list, count_command_dict))
 #-------------------part2---------------------#
     exit_point_connect(data)
 
