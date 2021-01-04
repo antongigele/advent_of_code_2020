@@ -31,18 +31,17 @@ def command_runner_part1(data, count_dict):
     acc = 0
     loop_indices = []
     while True:
+        splitted_line = data[i].split()
         if "nop" in data[i] and count_dict[i] == 0:
             count_dict[i] = count_dict[i] + 1
             loop_indices.append(i)
             i += 1
         elif "acc" in data[i] and count_dict[i] == 0:
-            splitted_line = data[i].split()
             acc += int(splitted_line[1])
             count_dict[i] = count_dict[i] + 1
             loop_indices.append(i)
             i += 1
         elif "jmp" in data[i] and count_dict[i] == 0:
-            splitted_line = data[i].split()
             count_dict[i] = count_dict[i] + 1
             loop_indices.append(i)
             i += int(splitted_line[1]) # jump nach vorne oder zurueck
@@ -72,72 +71,65 @@ def find_exitpoints(data):
             break    
         jumpout += 1
     return exitpoints      
-
+# please improve command_runner_part2 or exit_point_connect, there is still something missing
 def command_runner_part2(data, count_dict):
     j = 0
     acc = 0
-    loop_indices = []
-    while True:
-        if j >= len(data):
-            print("This loop works")
-            ende = True
-            j += 1
-            break
+    while j < len(data):
+        splitted_line = data[j].split()
         if "nop" in data[j] and count_dict[j] == 0:
             count_dict[j] = count_dict[j] + 1
             print(j)
-            loop_indices.append(j)
             j += 1
-            print(str(j))
+            print(j)
         elif "acc" in data[j] and count_dict[j] == 0:
-            splitted_line = data[j].split()
             acc += int(splitted_line[1])
             count_dict[j] = count_dict[j] + 1
-            loop_indices.append(j)
             j += 1
             print(j)
         elif "jmp" in data[j] and count_dict[j] == 0:
-            splitted_line = data[j].split()
             count_dict[j] = count_dict[j] + 1
-            loop_indices.append(j)
             j += int(splitted_line[1])
             print(j) 
+        elif j == len(data)-1:
+            print("This loop works")
+            ende = True
+            # j += 1
+            # break
         else:
             ende = False
             break     
 
-    return count_dict, acc, loop_indices, ende
+    return acc, ende
 
 def exit_point_connect(data_list):
     zeros_dict = count_dict(data_list) # neues dict mit nur nullen als values
-    used_and_unused_entries_dict = command_runner_part2(data_list, zeros_dict)[0] #part1 durchlaufen lassen um zu sehen welche commands ausserhalb der schleife liegen im dictionary
+    used_and_unused_entries_dict = command_runner_part1(data_list, zeros_dict)[0] #part1 durchlaufen lassen um zu sehen welche commands ausserhalb der schleife liegen im dictionary
     exit_points = find_exitpoints(data_list) # Ausstiegspunkte wiedergeben als liste
-    loop_indices = command_runner_part2(data_list, count_dict(data_list))[2] # zeros_dict geht hier aus irgendeinem Grund nicht
+    loop_indices = command_runner_part1(data_list, count_dict(data_list))[2] # zeros_dict geht hier aus irgendeinem Grund nicht
     nop_jmp_count = 0
     acc_count = 0
     for i in loop_indices:
-        splitted_line = data_list[i].split()
+        splitted_line = data_list[i].split() # erstmal in zwei eintraege aufsplitten
         if splitted_line[0] == "acc":
             pass
         elif splitted_line[0] == "nop" and (int(splitted_line[1]) + i) in exit_points:
             print("nop auf jmp aendern empfohlen")
         elif splitted_line[0] == "nop":
             # print(data_list[i] + " to")
-            data_list[i] = "jmp " + splitted_line[1]
+            data_list[i] = "jmp " + splitted_line[1] # nop durch jmp ersetzen und probieren
             # print(data_list[i])
-            print(command_runner_part2(data_list, count_dict(data_list))[3])
-            data_list[i] = "nop " + splitted_line[1]
+            print(command_runner_part2(data_list, count_dict(data_list)))
+            data_list[i] = "nop " + splitted_line[1] # jmp wieder auf nop zuruecksetzen
         elif splitted_line[0] == "jmp":
             # print(data_list[i] + " to")
             data_list[i] = "nop " + splitted_line[1]
             # print(data_list[i])
-            print(command_runner_part2(data_list, count_dict(data_list))[3])
+            print(command_runner_part2(data_list, count_dict(data_list)))
             data_list[i] = "jmp " + splitted_line[1]
         # print(str((int(splitted_line[1]))) + " " + str(i) + " = " + str((int(splitted_line[1]) + i)))    
 
     loop_size = sum(1 for value in used_and_unused_entries_dict.values() if value == 1)
-
-    return used_and_unused_entries_dict, exit_points
 
 def main():
     data = read_data("advent_of_code_8.txt") # data ist auch schon eine liste
@@ -145,7 +137,7 @@ def main():
 #-------------------part1---------------------#    
     # print(command_runner_part1(data_list, count_dict(data))[1])
 #-------------------part2---------------------#
-    print(exit_point_connect(data)[1])
+    print(exit_point_connect(data))
 
 
 if __name__ == "__main__":
