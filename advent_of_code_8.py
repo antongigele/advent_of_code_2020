@@ -74,34 +74,38 @@ def find_exitpoints(data):
     return exitpoints      
 
 def command_runner_part2(data, count_dict):
-    i = 0
+    j = 0
     acc = 0
     loop_indices = []
-    while i <= len(data):
-        if i == len(data):
+    while True:
+        if j >= len(data):
             print("This loop works")
             ende = True
-            i += 1
+            j += 1
             break
-        if "nop" in data[i] and count_dict[i] == 0:
-            count_dict[i] = count_dict[i] + 1
-            print(i)
-            loop_indices.append(i)
-            i += 1
-            print(str(i))
-        elif "acc" in data[i] and count_dict[i] == 0:
-            splitted_line = data[i].split()
+        if "nop" in data[j] and count_dict[j] == 0:
+            count_dict[j] = count_dict[j] + 1
+            print(j)
+            loop_indices.append(j)
+            j += 1
+            print(str(j))
+        elif "acc" in data[j] and count_dict[j] == 0:
+            splitted_line = data[j].split()
             acc += int(splitted_line[1])
-            count_dict[i] = count_dict[i] + 1
-            loop_indices.append(i)
-            i += 1
-            print(i)
-        elif "jmp" in data[i] and count_dict[i] == 0:
-            splitted_line = data[i].split()
-            count_dict[i] = count_dict[i] + 1
-            loop_indices.append(i)
-            i += int(splitted_line[1])
-            print(i)     
+            count_dict[j] = count_dict[j] + 1
+            loop_indices.append(j)
+            j += 1
+            print(j)
+        elif "jmp" in data[j] and count_dict[j] == 0:
+            splitted_line = data[j].split()
+            count_dict[j] = count_dict[j] + 1
+            loop_indices.append(j)
+            j += int(splitted_line[1])
+            print(j) 
+        else:
+            ende = False
+            break     
+
     return count_dict, acc, loop_indices, ende
 
 def exit_point_connect(data_list):
@@ -139,9 +143,9 @@ def main():
     data = read_data("advent_of_code_8.txt") # data ist auch schon eine liste
     data_list = listcreater(data, None, "\n", "") # mach ne liste ohne die "\n"'s die mit reingekommen sind
 #-------------------part1---------------------#    
-    print(command_runner_part1(data_list, count_dict(data))[1])
+    # print(command_runner_part1(data_list, count_dict(data))[1])
 #-------------------part2---------------------#
-    # exit_point_connect(data)[1]
+    print(exit_point_connect(data)[1])
 
 
 if __name__ == "__main__":
