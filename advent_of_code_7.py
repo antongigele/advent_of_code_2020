@@ -35,17 +35,17 @@ def get_valid_bag(data, valid_bag_lst):
     new_list = list(set(next_bag_layer_lst + valid_bag_lst))
     return list(set(new_list))
 
-def look_into_all_bags(data, valid_bag_lst):
-    len_list = [] # liste welche die laenge von jeder listeniteration speichert
-    i = 0
-    not_ending = True
-    while not_ending:
-        new_list = get_valid_bag(data, valid_bag_lst)
-        len_list.append(len(new_list))
-        if len_list[i] == len_list[i-1] and i > 1: # abfrage ob zwei listen gleich lange sind, in dem fall abbrechen
-            not_ending = False
-        i += 1    
-    return new_list
+# def look_into_all_bags(data, valid_bag_lst):
+#     len_list = [] # liste welche die laenge von jeder listeniteration speichert
+#     i = 0
+#     not_ending = True
+#     while i < 10:
+#         new_list = get_valid_bag(data, valid_bag_lst)
+#         len_list.append(len(new_list))
+#         if i == 3: # abfrage ob zwei listen gleich lange sind, in dem fall abbrechen
+#             not_ending = False
+#         i += 1    
+#     return look_into_all_bags(data, new_list)
 
 
 def put_bags_inside(valid_bag_lst, data):
@@ -57,6 +57,11 @@ def put_bags_inside(valid_bag_lst, data):
                 # print(line)
     return count
 
+def look_into_all_bags(data, valid_bag_lst, len_list = []):
+    new_layer = get_valid_bag(data, valid_bag_lst)
+    len_list.append(len(new_layer))
+    return look_into_all_bags(data, new_layer)
+
 def main():
     data = read_data("advent_of_code_7.txt")
     #------------------part1-------------------
@@ -67,7 +72,7 @@ def main():
     cleaned_data = listcreater(cleaned_data, None, ".", "")
 
     valid_bag_lst = ["shiny gold"]
-    print(look_into_all_bags(cleaned_data, valid_bag_lst))
+    # print(look_into_all_bags(cleaned_data, valid_bag_lst))
     # second_layer = get_valid_bag(cleaned_data, valid_bag_lst)
     # third_layer = get_valid_bag(cleaned_data, second_layer)
     # fourth_layer = get_valid_bag(cleaned_data, third_layer)
@@ -76,6 +81,11 @@ def main():
     # fourth_layer.remove("shiny gold")
     # print(fourth_layer)
     # print(put_bags_inside(valid_bag_lst, data))
+    k = 0
+    len_list = []
+    while k < 10:
+        print(look_into_all_bags(data, valid_bag_lst))
+        k += 1
     #------------------------------------------
 if __name__ == "__main__":
     main()
