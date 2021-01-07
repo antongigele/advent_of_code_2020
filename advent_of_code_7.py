@@ -1,3 +1,5 @@
+import pandas
+
 def read_data(path):
     try:
         file = open(path,'r')
@@ -25,6 +27,7 @@ def listcreater(data, sep = None, replace_old = None, replace_new = None):
 
 def get_valid_bag(data, valid_bag_lst, len_list = []):
     next_bag_layer_lst = []
+
     if len(len_list) > 2 and len_list[len(len_list)-1] == len_list[len(len_list)-2]:
         return valid_bag_lst
 
@@ -43,12 +46,12 @@ def get_valid_bag(data, valid_bag_lst, len_list = []):
 
 def count_bags_inside(data, valid_bag_lst):
     count = 0
-    for line in data:
+    for l in range(len(data)):
         for entry in valid_bag_lst:
-            if entry in line:
+            if entry in data[l]:
                 count += 1
-                # print(line)
-    return count
+                data[l] = "empty"
+    return data
 
 def main():
     data = read_data("advent_of_code_7.txt")
@@ -60,13 +63,18 @@ def main():
     cleaned_data = listcreater(cleaned_data, None, ".", "")
 
     valid_bag_lst = ["shiny gold"]
-    # print(get_valid_bag(cleaned_data, valid_bag_lst))
-    valid_bags = get_valid_bag(cleaned_data, valid_bag_lst).remove("shiny gold")
+    valid_bags = get_valid_bag(cleaned_data, valid_bag_lst)
+    valid_bags.remove("shiny gold")
+    # print(valid_bags)
+
     # second_layer = get_valid_bag(cleaned_data, valid_bag_lst)
     # third_layer = get_valid_bag(cleaned_data, second_layer)
     # fourth_layer = get_valid_bag(cleaned_data, third_layer)
     # break if len(nth_layer) == len(nth-1_layer)
-    print(count_bags_inside(cleaned_data, valid_bags))
+
+    output_data = count_bags_inside(cleaned_data, valid_bags)
+    df = pandas.DataFrame(data={"col1": output_data})
+    df.to_csv("./file.csv", sep=',',index=False)
     #------------------------------------------
 if __name__ == "__main__":
     main()
