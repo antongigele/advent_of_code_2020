@@ -23,32 +23,25 @@ def listcreater(data, sep = None, replace_old = None, replace_new = None):
             data[e] = data[e].replace(replace_old, replace_new)          
         return data
 
-def get_valid_bag(data, valid_bag_lst):
+def get_valid_bag(data, valid_bag_lst, len_list = []):
     next_bag_layer_lst = []
-    for line in data:
-        for i in range(len(valid_bag_lst)):
-            if valid_bag_lst[i] in line:
-                splitted_line = line.split()
-                if not (splitted_line[0] + splitted_line[1] == valid_bag_lst[i]): # wenn die ersten zwei woerter nicht das gesuchte bag sind, man moechte nur enthaltene bags
-                    next_bag_layer_lst.append(splitted_line[0]+" "+splitted_line[1])   
+    if len(len_list) > 2 and len_list[len(len_list)-1] == len_list[len(len_list)-2]:
+        return valid_bag_lst
 
-    new_list = list(set(next_bag_layer_lst + valid_bag_lst))
-    return list(set(new_list))
+    else:
+        for line in data:
+            for i in range(len(valid_bag_lst)):
+                if valid_bag_lst[i] in line:
+                    splitted_line = line.split()
+                    if not (splitted_line[0] + splitted_line[1] == valid_bag_lst[i]): # wenn die ersten zwei woerter nicht das gesuchte bag sind, man moechte nur enthaltene bags
+                        next_bag_layer_lst.append(splitted_line[0]+" "+splitted_line[1])   
 
-# def look_into_all_bags(data, valid_bag_lst):
-#     len_list = [] # liste welche die laenge von jeder listeniteration speichert
-#     i = 0
-#     not_ending = True
-#     while i < 10:
-#         new_list = get_valid_bag(data, valid_bag_lst)
-#         len_list.append(len(new_list))
-#         if i == 3: # abfrage ob zwei listen gleich lange sind, in dem fall abbrechen
-#             not_ending = False
-#         i += 1    
-#     return look_into_all_bags(data, new_list)
+        new_list = list(set(next_bag_layer_lst + valid_bag_lst))
+        len_list.append(len(new_list))
+        return get_valid_bag(data, new_list)
 
 
-def put_bags_inside(valid_bag_lst, data):
+def count_bags_inside(data, valid_bag_lst):
     count = 0
     for line in data:
         for entry in valid_bag_lst:
@@ -56,11 +49,6 @@ def put_bags_inside(valid_bag_lst, data):
                 count += 1
                 # print(line)
     return count
-
-def look_into_all_bags(data, valid_bag_lst, len_list = []):
-    new_layer = get_valid_bag(data, valid_bag_lst)
-    len_list.append(len(new_layer))
-    return look_into_all_bags(data, new_layer)
 
 def main():
     data = read_data("advent_of_code_7.txt")
@@ -72,20 +60,13 @@ def main():
     cleaned_data = listcreater(cleaned_data, None, ".", "")
 
     valid_bag_lst = ["shiny gold"]
-    # print(look_into_all_bags(cleaned_data, valid_bag_lst))
+    # print(get_valid_bag(cleaned_data, valid_bag_lst))
+    valid_bags = get_valid_bag(cleaned_data, valid_bag_lst).remove("shiny gold")
     # second_layer = get_valid_bag(cleaned_data, valid_bag_lst)
     # third_layer = get_valid_bag(cleaned_data, second_layer)
     # fourth_layer = get_valid_bag(cleaned_data, third_layer)
-    # print(second_layer)
-    # print(third_layer)
-    # fourth_layer.remove("shiny gold")
-    # print(fourth_layer)
-    # print(put_bags_inside(valid_bag_lst, data))
-    k = 0
-    len_list = []
-    while k < 10:
-        print(look_into_all_bags(data, valid_bag_lst))
-        k += 1
+    # break if len(nth_layer) == len(nth-1_layer)
+    print(count_bags_inside(cleaned_data, valid_bags))
     #------------------------------------------
 if __name__ == "__main__":
     main()
