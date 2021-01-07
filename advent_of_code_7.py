@@ -26,11 +26,11 @@ def listcreater(data, sep = None, replace_old = None, replace_new = None):
         return data
 
 def get_valid_bag(data, valid_bag_lst, len_list = []):
-    next_bag_layer_lst = []
+    next_bag_layer_lst = [] # next_bag_layer_lst wird bei jeder iteration neu gemacht und and valid_bag_lst drangehaengt
 
-    if len(len_list) > 2 and len_list[len(len_list)-1] == len_list[len(len_list)-2]:
-        return valid_bag_lst
-
+    if len(len_list) > 2 and len_list[len(len_list)-1] == len_list[len(len_list)-2]: # abbruchbedingung, die laengenliste nimmt bei jeder iteration die laenge der returnliste auf
+        return valid_bag_lst # wenn die letzte und vorletzte liste gleich lang sind, dann brich ab
+            # achtung: valid_bag_lst ist immer ein neuer und aktueller input
     else:
         for line in data:
             for i in range(len(valid_bag_lst)):
@@ -41,7 +41,7 @@ def get_valid_bag(data, valid_bag_lst, len_list = []):
 
         new_list = list(set(next_bag_layer_lst + valid_bag_lst))
         len_list.append(len(new_list))
-        return get_valid_bag(data, new_list)
+        return get_valid_bag(data, new_list) # meine erste listenrekursion
 
 
 def count_bags_inside(data, valid_bag_lst):
@@ -51,7 +51,7 @@ def count_bags_inside(data, valid_bag_lst):
             if entry in data[l]:
                 count += 1
                 data[l] = "empty"
-    return data
+    return count
 
 def main():
     data = read_data("advent_of_code_7.txt")
@@ -65,16 +65,9 @@ def main():
     valid_bag_lst = ["shiny gold"]
     valid_bags = get_valid_bag(cleaned_data, valid_bag_lst)
     valid_bags.remove("shiny gold")
-    # print(valid_bags)
 
-    # second_layer = get_valid_bag(cleaned_data, valid_bag_lst)
-    # third_layer = get_valid_bag(cleaned_data, second_layer)
-    # fourth_layer = get_valid_bag(cleaned_data, third_layer)
-    # break if len(nth_layer) == len(nth-1_layer)
+    print(count_bags_inside(cleaned_data, valid_bags))
+    #------------------part1-------------------
 
-    output_data = count_bags_inside(cleaned_data, valid_bags)
-    df = pandas.DataFrame(data={"col1": output_data})
-    df.to_csv("./file.csv", sep=',',index=False)
-    #------------------------------------------
 if __name__ == "__main__":
     main()
