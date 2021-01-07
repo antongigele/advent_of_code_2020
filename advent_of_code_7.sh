@@ -73,8 +73,8 @@ do
     || [[ "${valid_bags[l]: -1}" == "," ]] \
     || [[ "${valid_bags[l]: -1}" == "." ]]; then
         valid_bags[$l]="${valid_bags[l]:: -1}";
-    fi    
-done   
+    fi
+done
 ( IFS=$'\n'; echo "${valid_bags[*]}" )
 
 valid_counter=0;
