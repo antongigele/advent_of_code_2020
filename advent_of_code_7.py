@@ -75,8 +75,7 @@ def result(x, y):
 # erster bag_content ist hier: [' 5 mirrored crimson', ' 5 mirrored tan', ' 5 drab green', ' 5 shiny silver']
 def content_count(data, bag_content, num_pos_bags = 0):
     counting_bags = 0
-
-
+    print(bag_content)
     for entry in bag_content:
         contents = entry.replace(" ","",1) # von leerzeichen säubern
         contents = contents.split(" ", 1)
@@ -86,17 +85,11 @@ def content_count(data, bag_content, num_pos_bags = 0):
             splitted_line = line.split(":")
             if contents[1] in splitted_line[0] and not "no other" in splitted_line[1]:
                 print(splitted_line[1])
-                # print(line)
-                # print("hello")
-                # print(contents[1])
-
-                # new_bag_content = first_bag(data, contents[1])     
-        # print(new_bag_content)
-        # if "no other" not in bag_content:      
-                return content_count(data, first_bag(data, contents[1]), counting_bags) 
-        # else:
-        #     end_number = num_pos_bags + counting_bags
-        #     return end_number
+  
+                return content_count(data, first_bag(data, contents[1]), counting_bags) # der for loop verliert sich in der rekursion # sobald er mal in das if reinkommt überschreibt sich die funktion anscheinend selbst
+        
+        # print(contents[1])
+        return content_count(data, first_bag(data, contents[1]), counting_bags)
     
 
 def main():
