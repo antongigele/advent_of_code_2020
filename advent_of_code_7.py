@@ -100,8 +100,9 @@ def content_count(data, bag_content, level_new_number = 0, number_list = []):
     for entry in bag_content:
         contents = entry.replace(" ","",1) # von leerzeichen säubern
         contents = contents.split(" ", 1) # erstes leerzeichen als trennzeichen
-        upper_level_number = contents[0] 
+        upper_level_number = int(contents[0]) 
         upper_level_bag = contents[1]
+        level_new_number += upper_level_number
 
         # print(contents)
         for line in data:
@@ -114,19 +115,19 @@ def content_count(data, bag_content, level_new_number = 0, number_list = []):
                 for inner_bag_entry in inside_upper_level_bag:
                     sub_contents = inner_bag_entry.replace(" ","",1) # von leerzeichen säubern
                     sub_contents = sub_contents.split(" ", 1) # erstes leerzeichen als trennzeichen
-                    lower_level_number = sub_contents[0]
-                    # lower_level_bag = sub_contents[1]
-                    level_new_number = upper_level_number*lower_level_number
+                    lower_level_number = int(sub_contents[0])
+                    lower_level_bag = sub_contents[1]
+                    level_new_number += upper_level_number*lower_level_number
 
-                print(inside_upper_level_bag)
-                content_count(data, get_bag_content(data, upper_level_bag), level_new_number)
-                break
+                    print(sub_contents)
+                    content_count(data, get_bag_content(data, lower_level_bag), level_new_number)
+                # break
             elif upper_level_bag in outer_bag and "no other" in inner_bags:
                 number_list.append(level_new_number)
-                content_count(data, get_bag_content(data, upper_level_bag), number_list)
-                break
-            else:
-                return number_list
+                # content_count(data, get_bag_content(data, upper_level_bag), number_list)
+                # break
+            
+    return level_new_number
 
 
 
@@ -146,7 +147,7 @@ def content_count(data, bag_content, level_new_number = 0, number_list = []):
 
 
 def main():
-    data = read_data("advent_of_code_7.txt") # data ist schon eine liste
+    data = read_data("test_7_2.txt") # data ist schon eine liste
     cleaned_data = listcreater(data, None, "\n", "") # mit listcreater werden alle unnötigen chars entfernt
     cleaned_data = listcreater(cleaned_data, None, "contain", ":")
     cleaned_data = listcreater(cleaned_data, None, " bags", "")
@@ -162,7 +163,7 @@ def main():
     #------------------part2-------------------
     shiny_gold_bag_content = get_bag_content(cleaned_data, "shiny gold")
     content = content_count(cleaned_data, shiny_gold_bag_content)
-    content
+    print(content)
     # print(taschen_anzahl_ast(content, len(content)-1))
 
 if __name__ == "__main__":
