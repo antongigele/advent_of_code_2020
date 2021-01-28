@@ -100,17 +100,17 @@ def content_count(data, bag_content, level_new_number = 0, number_list = []):
     for entry in bag_content:
         contents = entry.replace(" ","",1) # von leerzeichen säubern
         contents = contents.split(" ", 1) # erstes leerzeichen als trennzeichen
-        upper_level_number = int(contents[0]) 
+        upper_level_number = int(contents[0])
         upper_level_bag = contents[1]
         level_new_number += upper_level_number
-
+        print(entry)
         # print(contents)
         for line in data:
             splitted_line = line.split(":")
             outer_bag = splitted_line[0]
             inner_bags = splitted_line[1]
             inside_upper_level_bag = inner_bags.split(",") # alle einzelnen taschen mit ihren koeffizienten in der upper_level_bag
-
+            
             if upper_level_bag in outer_bag and not "no other" in inner_bags: # ist die tasche am beginn der zeile von data und die tasche nicht leer dann...
                 for inner_bag_entry in inside_upper_level_bag:
                     sub_contents = inner_bag_entry.replace(" ","",1) # von leerzeichen säubern
@@ -119,8 +119,8 @@ def content_count(data, bag_content, level_new_number = 0, number_list = []):
                     lower_level_bag = sub_contents[1]
                     level_new_number += upper_level_number*lower_level_number
 
-                    print(sub_contents)
-                    content_count(data, get_bag_content(data, lower_level_bag), level_new_number)
+                    content_count(data, get_bag_content(data, outer_bag), level_new_number)
+
                 # break
             elif upper_level_bag in outer_bag and "no other" in inner_bags:
                 number_list.append(level_new_number)
@@ -147,7 +147,7 @@ def content_count(data, bag_content, level_new_number = 0, number_list = []):
 
 
 def main():
-    data = read_data("test_7_2.txt") # data ist schon eine liste
+    data = read_data("test_7.txt") # data ist schon eine liste
     cleaned_data = listcreater(data, None, "\n", "") # mit listcreater werden alle unnötigen chars entfernt
     cleaned_data = listcreater(cleaned_data, None, "contain", ":")
     cleaned_data = listcreater(cleaned_data, None, " bags", "")
