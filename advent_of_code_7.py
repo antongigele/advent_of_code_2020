@@ -95,48 +95,6 @@ def get_bag_content(data, bag):
 #     return bags_content_list
         
 # hier nochmal die gleiche funktion
-# def content_count(data, bag_content, level_new_number = 0, heritage = 0, number_list = []):
-#     print(bag_content)
-#     # bags_content_list.append(bag_content)
-#     for entry in bag_content:
-#         # print(entry)
-#         print(level_new_number)
-        
-#         contents = entry.split(" ", 1) # erstes leerzeichen als trennzeichen
-#         upper_level_number = int(contents[0])
-#         # print(upper_level_number)
-#         upper_level_bag = contents[1]
-
-#         if heritage == 0:
-#             level_new_number += upper_level_number
-#         # else:
-#         #     level_new_number += upper_level_number*heritage
-#         # heritage = level_new_number
-#         # print(contents)
-#         for line in data:
-#             splitted_line = line.split(":")
-#             outer_bag = splitted_line[0]
-#             # print(outer_bag)
-#             inner_bags = splitted_line[1]
-#             inside_upper_level_bag = inner_bags.split(",") # alle einzelnen taschen mit ihren koeffizienten in der upper_level_bag
-#             # print(inside_upper_level_bag)
-#             if upper_level_bag in outer_bag and not "no other" in inner_bags: # ist die tasche am beginn der zeile von data und die tasche nicht leer dann...
-#                 for inner_bag_entry in inside_upper_level_bag:
-#                     sub_content = inner_bag_entry.replace(" ","",1) # von leerzeichen säubern
-#                     sub_content = sub_content.split(" ", 1) # erstes leerzeichen als trennzeichen
-#                     lower_level_number = int(sub_content[0])
-#                     lower_level_bag = sub_content[1]
-#                     level_new_number += upper_level_number*lower_level_number
-#                     # print(upper_level_bag)
-#                     # print(lower_level_bag)
-#                     print(outer_bag)
-#                 content_count(data, get_bag_content(data, outer_bag), level_new_number, heritage)
-
-#             elif upper_level_bag in outer_bag and "no other" in inner_bags:
-#                 number_list.append(level_new_number)
-#                 print("the end")
-            
-#     return level_new_number
 
 def content_count(data, bag_content, level_new_number = 0, heritage = 0, number_list = []):
     for entry in bag_content:
@@ -159,7 +117,7 @@ def content_count(data, bag_content, level_new_number = 0, heritage = 0, number_
                 lower_level_number = int(sub_content[0])
                 lower_level_bag = sub_content[1]
                 level_new_number += upper_level_number*lower_level_number
-                
+
             content_count(data, get_bag_content(data, upper_level_bag), level_new_number, heritage)
 
         elif "no other" in inner_bags:
