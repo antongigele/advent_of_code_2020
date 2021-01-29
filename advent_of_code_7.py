@@ -55,15 +55,17 @@ def count_bags_inside(data, valid_bag_lst):
 
 #-----------------------part2----------------------#
 def get_bag_content(data, bag):
-    splitted_string_bag = bag.split()
+    splitted_string_bag = bag.split() # tasche in "shiny" und "gold" aufteilen
     for line in data:
-        splitted_line = line.split()
-        if splitted_line[0] == splitted_string_bag[0] and splitted_line[1] == splitted_string_bag[1]:
-            split_by_comma = line.split(",")
-            split_by_comma[0] = split_by_comma[0].replace(bag, "")
-            split_by_comma[0] = split_by_comma[0].replace(":", "")
-            split_by_comma[0] = split_by_comma[0].replace(" ", "", 1)
-            return split_by_comma # alles was in der tasche ist als eine saubere liste mit der man arbeiten kann
+        splitted_line = line.split() # zeile im datensatz wird aufgeteilt
+        if splitted_line[0] == splitted_string_bag[0] and splitted_line[1] == splitted_string_bag[1]: # such die tasche am anfang jeder zeile in der liste
+            split_by_colon = line.split(":")
+            inside_bag = split_by_colon[1].split(",")
+            for i in range(len(inside_bag)):
+                if inside_bag[i][0] == " ":
+                   inside_bag[i] = inside_bag[i].replace(" ", "", 1)
+
+    return inside_bag # alles was in der tasche ist als eine saubere liste mit der man arbeiten kann
 
 
 # formula = lambda x, n : x + x*n
@@ -93,43 +95,78 @@ def get_bag_content(data, bag):
 #     return bags_content_list
         
 # hier nochmal die gleiche funktion
-def content_count(data, bag_content, level_new_number = 0, number_list = []):
+# def content_count(data, bag_content, level_new_number = 0, heritage = 0, number_list = []):
+#     print(bag_content)
+#     # bags_content_list.append(bag_content)
+#     for entry in bag_content:
+#         # print(entry)
+#         print(level_new_number)
+        
+#         contents = entry.split(" ", 1) # erstes leerzeichen als trennzeichen
+#         upper_level_number = int(contents[0])
+#         # print(upper_level_number)
+#         upper_level_bag = contents[1]
 
-    # bags_content_list.append(bag_content)
-    # print(bag_content)
+#         if heritage == 0:
+#             level_new_number += upper_level_number
+#         # else:
+#         #     level_new_number += upper_level_number*heritage
+#         # heritage = level_new_number
+#         # print(contents)
+#         for line in data:
+#             splitted_line = line.split(":")
+#             outer_bag = splitted_line[0]
+#             # print(outer_bag)
+#             inner_bags = splitted_line[1]
+#             inside_upper_level_bag = inner_bags.split(",") # alle einzelnen taschen mit ihren koeffizienten in der upper_level_bag
+#             # print(inside_upper_level_bag)
+#             if upper_level_bag in outer_bag and not "no other" in inner_bags: # ist die tasche am beginn der zeile von data und die tasche nicht leer dann...
+#                 for inner_bag_entry in inside_upper_level_bag:
+#                     sub_content = inner_bag_entry.replace(" ","",1) # von leerzeichen säubern
+#                     sub_content = sub_content.split(" ", 1) # erstes leerzeichen als trennzeichen
+#                     lower_level_number = int(sub_content[0])
+#                     lower_level_bag = sub_content[1]
+#                     level_new_number += upper_level_number*lower_level_number
+#                     # print(upper_level_bag)
+#                     # print(lower_level_bag)
+#                     print(outer_bag)
+#                 content_count(data, get_bag_content(data, outer_bag), level_new_number, heritage)
+
+#             elif upper_level_bag in outer_bag and "no other" in inner_bags:
+#                 number_list.append(level_new_number)
+#                 print("the end")
+            
+#     return level_new_number
+
+def content_count(data, bag_content, level_new_number = 0, heritage = 0, number_list = []):
     for entry in bag_content:
-        contents = entry.replace(" ","",1) # von leerzeichen säubern
-        contents = contents.split(" ", 1) # erstes leerzeichen als trennzeichen
+        contents = entry.split(" ", 1) # erstes leerzeichen als trennzeichen
         upper_level_number = int(contents[0])
         upper_level_bag = contents[1]
-        level_new_number += upper_level_number
-        print(entry)
-        # print(contents)
-        for line in data:
-            splitted_line = line.split(":")
-            outer_bag = splitted_line[0]
-            inner_bags = splitted_line[1]
-            inside_upper_level_bag = inner_bags.split(",") # alle einzelnen taschen mit ihren koeffizienten in der upper_level_bag
-            
-            if upper_level_bag in outer_bag and not "no other" in inner_bags: # ist die tasche am beginn der zeile von data und die tasche nicht leer dann...
-                for inner_bag_entry in inside_upper_level_bag:
-                    sub_contents = inner_bag_entry.replace(" ","",1) # von leerzeichen säubern
-                    sub_contents = sub_contents.split(" ", 1) # erstes leerzeichen als trennzeichen
-                    lower_level_number = int(sub_contents[0])
-                    lower_level_bag = sub_contents[1]
-                    level_new_number += upper_level_number*lower_level_number
 
-                    content_count(data, get_bag_content(data, outer_bag), level_new_number)
+        if heritage == 0:
+            level_new_number += upper_level_number
+        else:
+            level_new_number += upper_level_number*heritage
+        heritage = level_new_number
+        # hol den tascheninhalt einer tasche aus dem bag_content
+        bag_with_content = get_bag_content(data, upper_level_bag) 
+        inner_bags = bag_with_content
 
-                # break
-            elif upper_level_bag in outer_bag and "no other" in inner_bags:
-                number_list.append(level_new_number)
-                # content_count(data, get_bag_content(data, upper_level_bag), number_list)
-                # break
+        if not "no other" in inner_bags: # ist die tasche am beginn der zeile von data und die tasche nicht leer dann...
+            for inner_bag_entry in inner_bags:
+                sub_content = inner_bag_entry.split(" ", 1) # erstes leerzeichen als trennzeichen
+                lower_level_number = int(sub_content[0])
+                lower_level_bag = sub_content[1]
+                level_new_number += upper_level_number*lower_level_number
+                
+            content_count(data, get_bag_content(data, upper_level_bag), level_new_number, heritage)
+
+        elif "no other" in inner_bags:
+            number_list.append(level_new_number)
+            print("the end")
             
     return level_new_number
-
-
 
 
 # def taschen_anzahl_ast(content, n, anzahl = 0):
@@ -147,7 +184,7 @@ def content_count(data, bag_content, level_new_number = 0, number_list = []):
 
 
 def main():
-    data = read_data("test_7.txt") # data ist schon eine liste
+    data = read_data("test_7_2.txt") # data ist schon eine liste
     cleaned_data = listcreater(data, None, "\n", "") # mit listcreater werden alle unnötigen chars entfernt
     cleaned_data = listcreater(cleaned_data, None, "contain", ":")
     cleaned_data = listcreater(cleaned_data, None, " bags", "")
