@@ -155,19 +155,6 @@ def try_count(data, bag_content, upper_bag_num = 0, lnn = 0):
     print(lnn, "return value")
     return lnn
 
-# def taschen_anzahl_ast(content, n, anzahl = 0):
-#     # l = len(content)
-#     if n < 1:
-#         # print(l)
-#         return anzahl
-#     else:
-#         for tasche in content[n]:
-#             taschen_inhalt = tasche.split()
-#             anzahl = int(taschen_inhalt[0])
-#             print(anzahl)
-#         # print(taschen_inhalt[0])
-#         return anzahl + anzahl*taschen_anzahl_ast(content, n-1, anzahl) ## funktioniert nur für einen ast als liste wie bei "test_7_2.txt" eigentlich bräuchte man dafür jetzt jeden ast als so eine liste
-
 
 def main():
     data = read_data("test_7.txt") # data ist schon eine liste
