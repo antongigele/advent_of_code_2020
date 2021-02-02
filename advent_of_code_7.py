@@ -64,6 +64,8 @@ def get_bag_content(data, bag):
             for i in range(len(inside_bag)):
                 if inside_bag[i][0] == " ":
                    inside_bag[i] = inside_bag[i].replace(" ", "", 1)
+                if inside_bag[i][-1] == " ":
+                   inside_bag[i] = inside_bag[i][:-1]
 
     return inside_bag # alles was in der tasche ist als eine saubere liste mit der man arbeiten kann
 
@@ -96,36 +98,62 @@ def get_bag_content(data, bag):
         
 # hier nochmal die gleiche funktion
 
-def content_count(data, bag_content, level_new_number = 0, heritage = 0, number_list = []):
+# def content_count(data, bag_content, level_new_number = 0, heritage = 0):
+#     for entry in bag_content:
+#         print(entry)
+#         print(level_new_number)
+#         contents = entry.split(" ", 1) # erstes leerzeichen als trennzeichen
+#         upper_level_number = int(contents[0])
+#         upper_level_bag = contents[1]
+#         # if heritage == 0:
+#         #     level_new_number += upper_level_number
+#         # else:
+#         #     level_new_number += upper_level_number*heritage
+#         heritage = level_new_number
+#         # hol den tascheninhalt einer tasche aus dem bag_content
+#         inner_bags = get_bag_content(data, upper_level_bag)
+#         # print(inner_bags)
+#         if not "no other" in inner_bags: # ist die tasche am beginn der zeile von data und die tasche nicht leer dann...
+#             for inner_bag_entry in inner_bags:
+#                 sub_content = inner_bag_entry.split(" ", 1) # erstes leerzeichen als trennzeichen
+#                 lower_level_number = int(sub_content[0])
+#                 lower_level_bag = sub_content[1]
+#                 # print(upper_level_number)
+#                 # print(lower_level_number)
+#                 # level_new_number += upper_level_number*lower_level_number
+#                 # print(level_new_number)
+#             # print("content_count has been called")
+#             # im ersten durchlauf bei test_7.txt level_new_number = 8
+#                 level_new_number += content_count(data, get_bag_content(data, upper_level_bag), level_new_number, heritage)
+
+#         elif "no other" in inner_bags:
+#             # pass
+#             print("the end")
+
+#     return level_new_number
+
+def try_count(data, bag_content, upper_bag_num = 0, lnn = 0):
     for entry in bag_content:
         contents = entry.split(" ", 1) # erstes leerzeichen als trennzeichen
-        upper_level_number = int(contents[0])
-        upper_level_bag = contents[1]
-
-        if heritage == 0:
-            level_new_number += upper_level_number
+        entry_num = int(contents[0])
+        entry_bag = contents[1]
+        if upper_bag_num == 0:
+            lnn += entry_num
+            print(lnn , "first layer")
+            if not "no other" in get_bag_content(data, entry_bag):
+                lnn += lnn*try_count(data, get_bag_content(data, entry_bag), entry_num, lnn)
+            else:
+                print("the end")
         else:
-            level_new_number += upper_level_number*heritage
-        heritage = level_new_number
-        # hol den tascheninhalt einer tasche aus dem bag_content
-        bag_with_content = get_bag_content(data, upper_level_bag) 
-        inner_bags = bag_with_content
-
-        if not "no other" in inner_bags: # ist die tasche am beginn der zeile von data und die tasche nicht leer dann...
-            for inner_bag_entry in inner_bags:
-                sub_content = inner_bag_entry.split(" ", 1) # erstes leerzeichen als trennzeichen
-                lower_level_number = int(sub_content[0])
-                lower_level_bag = sub_content[1]
-                level_new_number += upper_level_number*lower_level_number
-
-            content_count(data, get_bag_content(data, upper_level_bag), level_new_number, heritage)
-
-        elif "no other" in inner_bags:
-            number_list.append(level_new_number)
-            print("the end")
-            
-    return level_new_number
-
+            # print(entry_bag)
+            # lnn += entry_num + entry_num*
+            print(lnn, "deeper layer")
+            if not "no other" in get_bag_content(data, entry_bag):
+                lnn += entry_num*try_count(data, get_bag_content(data, entry_bag), entry_num, lnn)
+            else:
+                print("the end")
+    print(lnn, "return value")
+    return lnn
 
 # def taschen_anzahl_ast(content, n, anzahl = 0):
 #     # l = len(content)
@@ -142,7 +170,7 @@ def content_count(data, bag_content, level_new_number = 0, heritage = 0, number_
 
 
 def main():
-    data = read_data("test_7_2.txt") # data ist schon eine liste
+    data = read_data("test_7.txt") # data ist schon eine liste
     cleaned_data = listcreater(data, None, "\n", "") # mit listcreater werden alle unnötigen chars entfernt
     cleaned_data = listcreater(cleaned_data, None, "contain", ":")
     cleaned_data = listcreater(cleaned_data, None, " bags", "")
@@ -150,15 +178,17 @@ def main():
     cleaned_data = listcreater(cleaned_data, None, ".", "")
     # print(cleaned_data)
     #------------------part1-------------------
-    valid_bag_lst = ["shiny gold"]
-    valid_bags = get_valid_bag(cleaned_data, valid_bag_lst)
-    valid_bags.remove("shiny gold") # entferne shiny gold bag aus der suchliste weil shiny gold bag nicht in sich selbst enthalten sein soll
+    # valid_bag_lst = ["shiny gold"]
+    # valid_bags = get_valid_bag(cleaned_data, valid_bag_lst)
+    # valid_bags.remove("shiny gold") # entferne shiny gold bag aus der suchliste weil shiny gold bag nicht in sich selbst enthalten sein soll
 
     # print(count_bags_inside(cleaned_data, valid_bags))
     #------------------part2-------------------
     shiny_gold_bag_content = get_bag_content(cleaned_data, "shiny gold")
-    content = content_count(cleaned_data, shiny_gold_bag_content)
-    print(content)
+    content = try_count(cleaned_data, shiny_gold_bag_content)
+    content
+    # bag_content = get_bag_content(cleaned_data,"dotted black")
+    # print(bag_content)
     # print(taschen_anzahl_ast(content, len(content)-1))
 
 if __name__ == "__main__":
