@@ -134,25 +134,25 @@ def get_bag_content(data, bag):
 
 def try_count(data, bag_content, upper_bag_num = 0, lnn = 0):
     for entry in bag_content:
+        print(lnn)
+        print(entry)
         contents = entry.split(" ", 1) # erstes leerzeichen als trennzeichen
         entry_num = int(contents[0])
         entry_bag = contents[1]
         if upper_bag_num == 0:
             lnn += entry_num
-            print(lnn , "first layer")
-            if not "no other" in get_bag_content(data, entry_bag):
-                lnn += lnn*try_count(data, get_bag_content(data, entry_bag), entry_num, lnn)
-            else:
-                print("the end")
-        else:
-            # print(entry_bag)
-            # lnn += entry_num + entry_num*
-            print(lnn, "deeper layer")
+            # print(lnn , "first layer")
             if not "no other" in get_bag_content(data, entry_bag):
                 lnn += entry_num*try_count(data, get_bag_content(data, entry_bag), entry_num, lnn)
             else:
                 print("the end")
-    print(lnn, "return value")
+        else:
+            # print(entry_num, "deeper layer")
+            if not "no other" in get_bag_content(data, entry_bag):
+                print("XOXO")
+                lnn += entry_num*try_count(data, get_bag_content(data, entry_bag), entry_num, lnn)
+            # elif "no other" in get_bag_content(data, entry_bag):
+            #     print(entry_num, "return value")
     return lnn
 
 
@@ -173,7 +173,7 @@ def main():
     #------------------part2-------------------
     shiny_gold_bag_content = get_bag_content(cleaned_data, "shiny gold")
     content = try_count(cleaned_data, shiny_gold_bag_content)
-    content
+    print(content)
     # bag_content = get_bag_content(cleaned_data,"dotted black")
     # print(bag_content)
     # print(taschen_anzahl_ast(content, len(content)-1))
