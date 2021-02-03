@@ -70,14 +70,14 @@ def get_bag_content(data, bag):
     return inside_bag # alles was in der tasche ist als eine saubere liste mit der man arbeiten kann
 
 # war viel einfacher als ich anfangs gedacht hatte
-def try_count(data, bag_content, upper_bag_num = 0):
+def try_count(data, bag_content):
     lnn = 0
     if not "no other" in bag_content:
         for entry in bag_content:
             contents = entry.split(" ", 1) # erstes leerzeichen als trennzeichen
             entry_num = int(contents[0])
             entry_bag = contents[1]
-            lnn += entry_num + entry_num*try_count(data, get_bag_content(data, entry_bag), entry_num)
+            lnn += entry_num + entry_num*try_count(data, get_bag_content(data, entry_bag))
     return lnn
 
 
