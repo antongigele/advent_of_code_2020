@@ -132,32 +132,19 @@ def get_bag_content(data, bag):
 
 #     return level_new_number
 
-def try_count(data, bag_content, upper_bag_num = 0, lnn = 0):
-    for entry in bag_content:
-        print(lnn)
-        print(entry)
-        contents = entry.split(" ", 1) # erstes leerzeichen als trennzeichen
-        entry_num = int(contents[0])
-        entry_bag = contents[1]
-        if upper_bag_num == 0:
-            lnn += entry_num
-            # print(lnn , "first layer")
-            if not "no other" in get_bag_content(data, entry_bag):
-                lnn += entry_num*try_count(data, get_bag_content(data, entry_bag), entry_num, lnn)
-            else:
-                print("the end")
-        else:
-            # print(entry_num, "deeper layer")
-            if not "no other" in get_bag_content(data, entry_bag):
-                print("XOXO")
-                lnn += entry_num*try_count(data, get_bag_content(data, entry_bag), entry_num, lnn)
-            # elif "no other" in get_bag_content(data, entry_bag):
-            #     print(entry_num, "return value")
+def try_count(data, bag_content, upper_bag_num = 0):
+    lnn = 0
+    if not "no other" in bag_content:
+        for entry in bag_content:
+            contents = entry.split(" ", 1) # erstes leerzeichen als trennzeichen
+            entry_num = int(contents[0])
+            entry_bag = contents[1]
+            lnn += entry_num + entry_num*try_count(data, get_bag_content(data, entry_bag), entry_num)
     return lnn
 
 
 def main():
-    data = read_data("test_7.txt") # data ist schon eine liste
+    data = read_data("advent_of_code_7.txt") # data ist schon eine liste
     cleaned_data = listcreater(data, None, "\n", "") # mit listcreater werden alle unnötigen chars entfernt
     cleaned_data = listcreater(cleaned_data, None, "contain", ":")
     cleaned_data = listcreater(cleaned_data, None, " bags", "")
