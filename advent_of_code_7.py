@@ -69,69 +69,7 @@ def get_bag_content(data, bag):
 
     return inside_bag # alles was in der tasche ist als eine saubere liste mit der man arbeiten kann
 
-
-# formula = lambda x, n : x + x*n
-
-# erster bag_content ist hier: [' 5 mirrored crimson', ' 5 mirrored tan', ' 5 drab green', ' 5 shiny silver']
-# def content_count_1(data, bag_content, bags_content_list = []):
-#     bags_content_list.append(bag_content)
-    
-#     # print(bag_content)
-#     for entry in bag_content:
-#         contents = entry.replace(" ","",1) # von leerzeichen säubern
-#         contents = contents.split(" ", 1)
-#         # counting_bags += int(contents[0]) # summiert über alle taschenanzahlen in der jeweiligen tasche
-        
-#         for line in data:
-#             splitted_line = line.split(":")
-#             if contents[1] in splitted_line[0] and not "no other" in splitted_line[1]:
-#                 print(line)
-
-#                 content_count_1(data, get_bag_content(data, contents[1]), bags_content_list)
-#                 break
-#             elif contents[1] in splitted_line[0] and "no other" in splitted_line[1]:
-#                 print(line)
-
-#                 content_count_1(data, get_bag_content(data, contents[1]), bags_content_list)
-#                 break
-#     return bags_content_list
-        
-# hier nochmal die gleiche funktion
-
-# def content_count(data, bag_content, level_new_number = 0, heritage = 0):
-#     for entry in bag_content:
-#         print(entry)
-#         print(level_new_number)
-#         contents = entry.split(" ", 1) # erstes leerzeichen als trennzeichen
-#         upper_level_number = int(contents[0])
-#         upper_level_bag = contents[1]
-#         # if heritage == 0:
-#         #     level_new_number += upper_level_number
-#         # else:
-#         #     level_new_number += upper_level_number*heritage
-#         heritage = level_new_number
-#         # hol den tascheninhalt einer tasche aus dem bag_content
-#         inner_bags = get_bag_content(data, upper_level_bag)
-#         # print(inner_bags)
-#         if not "no other" in inner_bags: # ist die tasche am beginn der zeile von data und die tasche nicht leer dann...
-#             for inner_bag_entry in inner_bags:
-#                 sub_content = inner_bag_entry.split(" ", 1) # erstes leerzeichen als trennzeichen
-#                 lower_level_number = int(sub_content[0])
-#                 lower_level_bag = sub_content[1]
-#                 # print(upper_level_number)
-#                 # print(lower_level_number)
-#                 # level_new_number += upper_level_number*lower_level_number
-#                 # print(level_new_number)
-#             # print("content_count has been called")
-#             # im ersten durchlauf bei test_7.txt level_new_number = 8
-#                 level_new_number += content_count(data, get_bag_content(data, upper_level_bag), level_new_number, heritage)
-
-#         elif "no other" in inner_bags:
-#             # pass
-#             print("the end")
-
-#     return level_new_number
-
+# war viel einfacher als ich anfangs gedacht hatte
 def try_count(data, bag_content, upper_bag_num = 0):
     lnn = 0
     if not "no other" in bag_content:
@@ -144,7 +82,7 @@ def try_count(data, bag_content, upper_bag_num = 0):
 
 
 def main():
-    data = read_data("advent_of_code_7.txt") # data ist schon eine liste
+    data = read_data("test_7_modified.txt") # data ist schon eine liste
     cleaned_data = listcreater(data, None, "\n", "") # mit listcreater werden alle unnötigen chars entfernt
     cleaned_data = listcreater(cleaned_data, None, "contain", ":")
     cleaned_data = listcreater(cleaned_data, None, " bags", "")
