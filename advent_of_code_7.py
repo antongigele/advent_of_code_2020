@@ -11,7 +11,6 @@ def read_data(path):
 
     return(data)
 
-#-----------------------part1----------------------#
 # zuerst alle strings "bags" und "bag" loeschen, und dann alle "contain" durch ":" ersetzen
 def listcreater(data, sep = None, replace_old = None, replace_new = None):
     if sep is not None:
@@ -25,6 +24,7 @@ def listcreater(data, sep = None, replace_old = None, replace_new = None):
             data[e] = data[e].replace(replace_old, replace_new)          
         return data
 
+#-----------------------part1----------------------#
 def get_valid_bag(data, valid_bag_lst, len_list = []): # listenlängen werden in der len_list festgehalten
     next_bag_layer_lst = [] # next_bag_layer_lst wird bei jeder iteration neu gemacht und and valid_bag_lst drangehaengt
 
@@ -88,7 +88,6 @@ def main():
     cleaned_data = listcreater(cleaned_data, None, " bags", "")
     cleaned_data = listcreater(cleaned_data, None, " bag", "")
     cleaned_data = listcreater(cleaned_data, None, ".", "")
-    # print(cleaned_data)
     #------------------part1-------------------
     # valid_bag_lst = ["shiny gold"]
     # valid_bags = get_valid_bag(cleaned_data, valid_bag_lst)
@@ -99,9 +98,6 @@ def main():
     shiny_gold_bag_content = get_bag_content(cleaned_data, "shiny gold")
     content = try_count(cleaned_data, shiny_gold_bag_content)
     print(content)
-    # bag_content = get_bag_content(cleaned_data,"dotted black")
-    # print(bag_content)
-    # print(taschen_anzahl_ast(content, len(content)-1))
 
 if __name__ == "__main__":
     main()
