@@ -23,34 +23,45 @@ def listcreater(data, sep = None, replace_old = None, replace_new = None):
         return data
 
 #-----------------------part1----------------------#
-
-def altering_list(data):
+#liste der länge 25 + 1 die mit start ab irgendwo im datensatz bestimmt werden kann
+def altering_list(data, start):
     alt_list = []
-    for count, entry in enumerate(data,1):
-        alt_list.append(entry)
-        if count == 26:
+    for e in range(start, len(data)):
+        alt_list.append(data[e])
+        if e == start + 25:
             break
-    return alt_list    
+    return alt_list
 
+# erstellt die summenliste der letzten 25 einträge
 def find_rulebreaker(list_input):
     sum_list = []
-    for i in range(len(list_input)):
-        for j in range(len(list_input)):
-            if i != j:
+    for i in range(len(list_input)-1):  # den letzten eintrag nicht
+        for j in range(len(list_input)-1):  # den letzten eintrag nicht
+            if i != j: # summanden paarweise unterschiedlich
                 sum = int(list_input[i]) + int(list_input[j])
                 sum_list.append(sum)
     if int(list_input[-1]) in sum_list:
-        return f'{list_input[-1]} is in the 25-list'
+        return True, f'{list_input[-1]} is in the 25-list'
     else:
-        return f'{list_input[-1]} is a rulebreaker'          
+        return False, f'{list_input[-1]} is a rulebreaker'          
 
-
+def go_through_list(data): # die summenliste wird laufend durch alle einträge mit find_rulebreaker ermittelt
+    for i in range(len(data)):
+        current_list = altering_list(data, i)
+        # print(find_rulebreaker(current_list))
+        result = find_rulebreaker(current_list)
+        if result[0] == False:
+            return f'{result[1]} at position {i}'
+            break
 
 def main():
     data = read_data('advent_of_code_9.txt')
     cleaned_data = listcreater(data, None, '\n', '')
-    twentyfive_list = altering_list(cleaned_data)
-    print(find_rulebreaker(twentyfive_list))
+#-----------------------part1----------------------#        
+    print(go_through_list(cleaned_data))
+
+#-----------------------part2----------------------#
+
 
 if __name__ == '__main__':
     main()    
