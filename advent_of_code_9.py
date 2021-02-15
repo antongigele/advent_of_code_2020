@@ -66,8 +66,23 @@ def partial_sums(data, rule_break_number):
             partial_sum_list.append(partial_sum)
     return partial_sum_list
 
-def investigate_partial(data, partial_sum_list):
-    pass
+
+def partly_partial_sums(data, rule_break_number, partial_sums, start = 0):
+    for i in range(start, len(partial_sums)):
+        if partial_sums[i] - partial_sums[start] == int(rule_break_number[0]):
+            print(f'Bis zur {i}ten Stelle, gestartet von {start}')
+            return start, i
+
+
+def investigate_partial(data, rule_break_number, partial_sum_list):
+    for i in range(len(partial_sum_list)):
+        if int(rule_break_number[0]) == partial_sum_list[i]:
+            return i
+        else:
+            return f'{rule_break_number[0]} was not found in this list'
+
+def result(data, start, stop):
+    return data[start] + data[stop]
 
 def main():
     data = read_data('advent_of_code_9.txt')
@@ -77,8 +92,10 @@ def main():
     rule_break_number = go_through_list(cleaned_data)
     # print(rule_break_number)
 #-----------------------part2----------------------#
-    print(partial_sums(cleaned_data, rule_break_number))
-
-
+    partialsummen_liste = partial_sums(cleaned_data, rule_break_number)
+    # investigate_partial(cleaned_data, rule_break_number, partialsummen_liste)
+    for k in range(len(partialsummen_liste)):
+        partly_partial_sums(cleaned_data, rule_break_number, partialsummen_liste, k)
+    print(result(cleaned_data, 455, 472))
 if __name__ == '__main__':
     main()    
