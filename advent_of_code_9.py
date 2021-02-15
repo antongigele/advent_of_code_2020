@@ -61,28 +61,29 @@ def partial_sums(data, rule_break_number):
     partial_sum_list = []
     partial_sum = 0
     for i in range(rule_break_number[1]):
-        if int(data[i]) < int(rule_break_number[0]): #  very partial weil alle zahlen die größer sind als der rulebreaker rausfliegen
-            partial_sum += int(data[i])
-            partial_sum_list.append(partial_sum)
+        # if int(data[i]) < int(rule_break_number[0]): #  very partial weil alle zahlen die größer sind als der rulebreaker rausfliegen
+        partial_sum += int(data[i])
+        partial_sum_list.append(partial_sum)
     return partial_sum_list
 
 
 def partly_partial_sums(data, rule_break_number, partial_sums, start = 0):
     for i in range(start, len(partial_sums)):
-        if partial_sums[i] - partial_sums[start] == int(rule_break_number[0]):
-            print(f'Bis zur {i}ten Stelle, gestartet von {start}')
-            return start, i
+        if partial_sums[i] - partial_sums[start] == int(rule_break_number[0]): # partialsummen von aufsteigenden startpunkten weg
+            print(f'Von {start + 1} bis {i}')
+            return start + 1, i
 
+def lookup_range(data, rule_break_number, partial_sums):
+    for k in range(len(partial_sums)):
+        result = partly_partial_sums(data, rule_break_number, partial_sums, k)
+        if type(result) == tuple: # wenn die Funktion etwas zurückgibt, auf eine abstruse Art
+            range_list = data[result[0]:result[1] + 1]
+            return range_list # die sequenz der lösungszahlen als liste
 
-def investigate_partial(data, rule_break_number, partial_sum_list):
-    for i in range(len(partial_sum_list)):
-        if int(rule_break_number[0]) == partial_sum_list[i]:
-            return i
-        else:
-            return f'{rule_break_number[0]} was not found in this list'
+def result(range_list):
+    int_list = [int(i) for i in range_list] # alle listeneintraege in integer verwandeln
+    print(min(int_list) + max(int_list))
 
-def result(data, start, stop):
-    return data[start] + data[stop]
 
 def main():
     data = read_data('advent_of_code_9.txt')
@@ -93,9 +94,7 @@ def main():
     # print(rule_break_number)
 #-----------------------part2----------------------#
     partialsummen_liste = partial_sums(cleaned_data, rule_break_number)
-    # investigate_partial(cleaned_data, rule_break_number, partialsummen_liste)
-    for k in range(len(partialsummen_liste)):
-        partly_partial_sums(cleaned_data, rule_break_number, partialsummen_liste, k)
-    print(result(cleaned_data, 455, 472))
+    range_list = lookup_range(cleaned_data, rule_break_number, partialsummen_liste)
+    result(range_list)
 if __name__ == '__main__':
     main()    
