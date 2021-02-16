@@ -22,6 +22,15 @@ def listcreater(data, sep = None, replace_old = None, replace_new = None):
             data[e] = data[e].replace(replace_old, replace_new)          
         return data
 
+#-----------------------part1----------------------#
+
+def climb_up(data):
+    pass
+
+def detect_differences(climb_list):
+    pass
+
+
 
 def main():
     data = read_data("advent_of_code_10.txt")
