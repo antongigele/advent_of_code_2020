@@ -91,7 +91,7 @@ def main():
 #-----------------------part1----------------------#        
     
     rule_break_number = go_through_list(cleaned_data)
-    # print(rule_break_number)
+    print(rule_break_number)
 #-----------------------part2----------------------#
     partialsummen_liste = partial_sums(cleaned_data, rule_break_number)
     range_list = lookup_range(cleaned_data, rule_break_number, partialsummen_liste)
