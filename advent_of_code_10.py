@@ -1,4 +1,5 @@
-import math
+from scipy.special import comb
+
 def read_data(path):
     try:
         file = open(path, 'r')
@@ -52,20 +53,21 @@ def detect_differences(data):
 
 def binomial(n):
     binom_sum = 0
-    for k in range(n):
-        binom_sum += math.binom(n, k)
+    for k in range(n+1):
+        binom_sum += comb(n, k)
     return binom_sum
 
 # math.factorial(n) // math.factorial(k) // math.factorial(n - k)
 
 def main():
-    data = read_data("advent_of_code_10.txt")
+    data = read_data("test_2_10.txt")
     cleaned_data = listcreater(data, None, "\n", "")
 #-----------------------part1----------------------#
 #    print(climb_up(cleaned_data))
 
 #-----------------------part2----------------------#
-    print(detect_differences(cleaned_data))
+    print(binomial(detect_differences(cleaned_data)))
+#    print(binomial(5))
 
 if __name__ == "__main__":
     main()
