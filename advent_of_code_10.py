@@ -57,17 +57,10 @@ def get_chains(diff_list): # alle ketten bestimmen
     chain_list = [''] * len(diff_list)
     chain_num = 0
     for i in range(len(diff_list)):
-        if (i == 0) and (diff_list[i+1] - diff_list[i] == 1) and (diff_list[i] == 1):
+        if (i == 0) or (diff_list[i] - diff_list[i-1] == 1): # der erste eintrag immer || wenn der nächste um 1 größer ist
             #print(f"{chain_num} {diff_list[i]}")
             chain_list[chain_num] += str(1)
-        elif (i != 0) and (diff_list[i] - diff_list[i-1] == 1):
-            #print(f"{chain_num} {diff_list[i]}")
-            chain_list[chain_num] += str(1)
-        elif (i != 0) and (diff_list[i] - diff_list[i-1] != 1) and (diff_list[i+1] - diff_list[i] == 1):
-            chain_num += 1
-            #print(f"{chain_num} {diff_list[i]}")
-            chain_list[chain_num] += str(1)
-        elif (i != 0) and (diff_list[i] - diff_list[i-1] != 1) and (diff_list[i+1] - diff_list[i] != 1):
+        elif (diff_list[i] - diff_list[i-1] != 1): # wenn der nächste nicht um 1 größer ist dann incrementiere um 1
             chain_num += 1
             #print(f"{chain_num} {diff_list[i]}")
             chain_list[chain_num] += str(1)
@@ -95,14 +88,14 @@ def calculate_perm(chain_list):
     return num_perm
 
 def main():
-    data = read_data("test_2_10.txt")
+    data = read_data("test_10.txt")
     cleaned_data = listcreater(data, None, "\n", "")
 #-----------------------part1----------------------#
 #    print(climb_up(cleaned_data))
 
 #-----------------------part2----------------------#
     diff_list = detect_differences(cleaned_data)
-    
+    print(diff_list)
     chain_list = get_chains(diff_list)
     print(chain_list)
     print(calculate_perm(chain_list))
