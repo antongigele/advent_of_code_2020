@@ -1,4 +1,3 @@
-from scipy.special import comb
 
 def read_data(path):
     try:
