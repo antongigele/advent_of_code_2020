@@ -31,16 +31,17 @@ def info_array(seat_array):
     adjacency_matrix = np.full((dim[0], dim[1]), 0, dtype = int)
     for i in range(1, dim[0]-1):
         for j in range(1, dim[1]-1):
-            adj_sum = (seat_array[i-1][j]
-            + seat_array[i-1][j+1]
-            + seat_array[i][j+1]
-            + seat_array[i+1][j+1]
-            + seat_array[i+1][j]
-            + seat_array[i+1][j-1]
-            + seat_array[i][j-1]
-            + seat_array[i-1][j-1])
-            adj_sum = int(str(adj_sum)[-1])
-            adjacency_matrix[i][j] = (adj_sum)
+            if  seat_array[i][j] != 10:
+                adj_sum = (seat_array[i-1][j]
+                + seat_array[i-1][j+1]
+                + seat_array[i][j+1]
+                + seat_array[i+1][j+1]
+                + seat_array[i+1][j]
+                + seat_array[i+1][j-1]
+                + seat_array[i][j-1]
+                + seat_array[i-1][j-1])
+                adj_sum = int(str(adj_sum)[-1])
+                adjacency_matrix[i][j] = (adj_sum)
     return adjacency_matrix        
 
 
@@ -56,7 +57,7 @@ def single_reshuffle_cycle(seat_array, adjacency_matrix):
     # -erstelle eine neue adjazenzmatrix nach der neuen sitzbesetzung
     new_adjacency_matrix = info_array(seat_array)
     # -returne die neue sitzbesetzung und die neue adjazenz-matrix
-    return seat_array, adjacency_matrix, new_adjacency_matrix
+    return seat_array, new_adjacency_matrix
 
 def areSame(A,B):
    dim = A.shape
@@ -66,45 +67,55 @@ def areSame(A,B):
             return 0
    return 1
 
-def multiple_reshuffle_cycles(seat_array, adjacency_matrix, new_adjacency_matrix = None):
-    dim = seat_array.shape
+def multiple_reshuffle_cycles(previous_cycle, adjacency_matrix):
+    dim = previous_cycle.shape
+    # -einen zyklus durchführen
+    next_cycle = single_reshuffle_cycle(previous_cycle, adjacency_matrix)
     # -zuerst prüfen ob new_adjacency_matrix == adjacency_matrix gilt
-    if new_adjacency_matrix is not None and areSame(new_adjacency_matrix, adjacency_matrix) == 1:
+    if areSame(next_cycle[1], adjacency_matrix) == 1:
         sum = 0
         print("Boolean triggered")
         for i in range(1, dim[0]-1):
             for j in range(1, dim[1]-1):
-                if seat_array[i][j] == 1:
+                if previous_cycle[i][j] == 1:
                     sum += 1
-        return sum            
+        return sum, next_cycle           
     
     else:
-        # -einen zyklus durchführen
-        cycle = single_reshuffle_cycle(seat_array, adjacency_matrix)
         # -zyklusrekursion aufrufen
-        return multiple_reshuffle_cycles(cycle[0], cycle[1], cycle[2])
+        return multiple_reshuffle_cycles(next_cycle[0], next_cycle[1])
 
 
 def main():
     start_array = read_data_as_array("test_11.txt")
     seat_array = first_seating_round(start_array)
-    # adjacency_matrix = info_array(seat_array)
+    print(seat_array)
+    adjacency_matrix = info_array(seat_array)
+    print(adjacency_matrix)
 
     # first_cycle = single_reshuffle_cycle(seat_array, adjacency_matrix)
     # second_cycle = single_reshuffle_cycle(first_cycle[0], first_cycle[1])
     # third_cycle = single_reshuffle_cycle(second_cycle[0], second_cycle[1])
     # fourth_cycle = single_reshuffle_cycle(third_cycle[0], third_cycle[1])
     # fifth_cycle = single_reshuffle_cycle(fourth_cycle[0], fourth_cycle[1])
-
-    # print(start_array)
-    print(seat_array)
+    # sixth_cycle = single_reshuffle_cycle(fifth_cycle[0], fifth_cycle[1])
+    # print(first_cycle[1])
+    # print(second_cycle[1])
+    # print(third_cycle[1])
+    # print(fourth_cycle[1])
+    # print(fifth_cycle[1])
+    # first round is still correct
     # print(first_cycle[0])
-    # print(second_cycle[0])
-    # print(third_cycle[0])
-    # print(fourth_cycle[0])
-    # print(fifth_cycle[0]) 
-    # print(multiple_reshuffle_cycles(seat_array, adjacency_matrix))
-    # print(areSame(first_cycle[1], first_cycle[2]))
+    # print(first_cycle[2])
+    # print(fifth_cycle[0])
+    # print(areSame(fifth_cycle[1], sixth_cycle[1]))
+
+    # next_cycle = single_reshuffle_cycle(seat_array, adjacency_matrix)
+    # aloa_cylce = single_reshuffle_cycle(next_cycle[0], next_cycle[1])
+    # print(seat_array)
+    # print(next_cycle[0])
+    # print(aloa_cylce)
+    print(multiple_reshuffle_cycles(seat_array, adjacency_matrix)[0])
 
 if __name__ == "__main__":
     main()    
