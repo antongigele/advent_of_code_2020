@@ -80,10 +80,22 @@ function manhattan_dist(data) {
     return Math.abs(x_position) + Math.abs(y_position);
 }
 
+//----------------------part2-----------------------
+var waypoint_start = [10, 1];
+// waypoint function under construction
+function change_waypoint(waypoint_start, input) {
+    if (input.substring(0,1) == "R" && input.substring(1) == 90 || input.substring(0,1) == "L" && input.substring(1) == 270) {
+        var new_waypoint = [waypoint_start[1], -waypoint_start[0]];
+        return new_waypoint;
+    }
+}
+
 function main() {
     var data = read_file("test_12.txt");
 //----------------------part1-----------------------
-    console.log(manhattan_dist(data));
+    // console.log(manhattan_dist(data));
+//----------------------part2-----------------------
+    console.log(change_waypoint(waypoint_start, "L270"))
 }
 
 main();
