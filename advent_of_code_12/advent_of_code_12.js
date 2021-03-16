@@ -81,21 +81,56 @@ function manhattan_dist(data) {
 }
 
 //----------------------part2-----------------------
-var waypoint_start = [10, 1];
 // waypoint function under construction
 function change_waypoint(waypoint_start, input) {
     if (input.substring(0,1) == "R" && input.substring(1) == 90 || input.substring(0,1) == "L" && input.substring(1) == 270) {
         var new_waypoint = [waypoint_start[1], -waypoint_start[0]];
         return new_waypoint;
     }
+    else if (input.substring(0,1) == "R" && input.substring(1) == 180 || input.substring(0,1) == "L" && input.substring(1) == 180) {
+        var new_waypoint = [-waypoint_start[0], -waypoint_start[1]];
+        return new_waypoint;
+    }
+    else if (input.substring(0,1) == "R" && input.substring(1) == 270 || input.substring(0,1) == "L" && input.substring(1) == 90) {
+        var new_waypoint = [-waypoint_start[1], waypoint_start[0]];
+        return new_waypoint;
+    }
+    else if (input.substring(0,1) == "N") {
+        var new_waypoint = [waypoint_start[0], waypoint_start[1] + parseInt(input.substring(1))];
+        return new_waypoint;
+    }
+    else if (input.substring(0,1) == "S") {
+        var new_waypoint = [waypoint_start[0], waypoint_start[1] - parseInt(input.substring(1))];
+        return new_waypoint;
+    }
+    else if (input.substring(0,1) == "E") {
+        var new_waypoint = [waypoint_start[0] + parseInt(input.substring(1)), waypoint_start[1]];
+        return new_waypoint;
+    }
+    else if (input.substring(0,1) == "W") {
+        var new_waypoint = [waypoint_start[0] - parseInt(input.substring(1)), waypoint_start[1]];
+        return new_waypoint;
+    }
+    
 }
+// still not ready
+// function manhattan_dist_waypoint(data, waypoint_start) {
+//     if (input.substring(0,1) == "F") {
+//         var new_position = 
+//     }
+// }
 
 function main() {
     var data = read_file("test_12.txt");
 //----------------------part1-----------------------
     // console.log(manhattan_dist(data));
 //----------------------part2-----------------------
-    console.log(change_waypoint(waypoint_start, "L270"))
+    var waypoint_start = [10, 1];
+    console.log(change_waypoint(waypoint_start, "E4"))
+    console.log(change_waypoint(waypoint_start, "N4"))
+    console.log(change_waypoint(waypoint_start, "R90"))
+    console.log(change_waypoint(waypoint_start, "W8"))
+    console.log(change_waypoint(waypoint_start, "S89"))
 }
 
 main();
