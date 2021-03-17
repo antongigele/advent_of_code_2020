@@ -81,7 +81,7 @@ function manhattan_dist(data) {
 }
 
 //----------------------part2-----------------------
-// waypoint function under construction
+// waypoint function
 function change_waypoint(waypoint_start, input) {
     if (input.substring(0,1) == "R" && input.substring(1) == 90 || input.substring(0,1) == "L" && input.substring(1) == 270) {
         var new_waypoint = [waypoint_start[1], -waypoint_start[0]];
@@ -113,24 +113,27 @@ function change_waypoint(waypoint_start, input) {
     }
     
 }
-// still not ready
-// function manhattan_dist_waypoint(data, waypoint_start) {
-//     if (input.substring(0,1) == "F") {
-//         var new_position = 
-//     }
-// }
+
+function manhattan_dist_waypoint(data, waypoint, starting_position) {
+    for (x in data) {
+        if (data[x].substring(0,1) == "F") { // schiffsposition ändert sich
+            starting_position = [starting_position[0] + parseInt(data[x].substring(1))*waypoint[0], starting_position[1] + parseInt(data[x].substring(1))*waypoint[1]];
+        }
+        else {
+            waypoint = change_waypoint(waypoint, data[x]) // wegpunkt ändert sich
+        }
+    }
+    return Math.abs(starting_position[0]) + Math.abs(starting_position[1]);
+}
 
 function main() {
-    var data = read_file("test_12.txt");
+    var data = read_file("advent_of_code_12.txt");
 //----------------------part1-----------------------
     // console.log(manhattan_dist(data));
 //----------------------part2-----------------------
-    var waypoint_start = [10, 1];
-    console.log(change_waypoint(waypoint_start, "E4"))
-    console.log(change_waypoint(waypoint_start, "N4"))
-    console.log(change_waypoint(waypoint_start, "R90"))
-    console.log(change_waypoint(waypoint_start, "W8"))
-    console.log(change_waypoint(waypoint_start, "S89"))
+    var waypoint_start = [10, 1]; // wo der wegpunkt startet
+    var starting_position = [0, 0]; // wo das schiff startet
+    console.log(manhattan_dist_waypoint(data, waypoint_start, starting_position))
 }
 
 main();
