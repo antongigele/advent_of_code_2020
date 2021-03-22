@@ -14,6 +14,7 @@ namespace advent_of_code_13 {
             }
         }
 
+
         // function gibt ein tuple = (array, float) zurück
         public static (string[], float) ReadFromFile(string path, string sep = ",") {
 
@@ -28,6 +29,7 @@ namespace advent_of_code_13 {
             return(bus_list, departure_timestamp);
         }
 
+
         public static double[] residue_distance(string[] bus_list, float departure_timestamp) {
             double[] residues = new double[bus_list.Length];
             int i = 0;
@@ -35,13 +37,14 @@ namespace advent_of_code_13 {
                 if (e == "x") 
                 {
                     Console.WriteLine(e + "\n");
-                    residues[i] = 1;
+                    residues[i] = 0;
                 }
                 else 
                 {   
                     Console.WriteLine(departure_timestamp/float.Parse(e) - Math.Floor(departure_timestamp/float.Parse(e)) + "\n");
                     residues[i] = departure_timestamp/float.Parse(e) - Math.Floor(departure_timestamp/float.Parse(e));
                     residues[i] *= double.Parse(bus_list[i]);
+                    residues[i] = Math.Floor(residues[i]);
                 }
                 i++;
             }
