@@ -7,14 +7,6 @@ namespace advent_of_code_13 {
     
     class advent_of_code_13 {
 
-        public static void Main() {
-            (string[] bus_list, float departure_timestamp) = ReadFromFile("advent_of_code_13.txt"); // der output dieser funktion ist ein tuple
-            var residues = residue_distance(bus_list, departure_timestamp); // der zeitliche abstand wird als rest kalkuliert
-
-            Console.WriteLine(calculate_min(residues, bus_list));
-        }
-
-
         // function gibt ein tuple = (array, float) zurück
         public static (string[], float) ReadFromFile(string path, string sep = ",") {
 
@@ -48,6 +40,7 @@ namespace advent_of_code_13 {
 
         public static int calculate_min(double[] residues, string[] bus_list) {
             int len = 0;
+            //anzahl der einträge die nicht x sind
             foreach (double e in residues) {
                 if (e != 0) {
                     len++;
@@ -69,8 +62,18 @@ namespace advent_of_code_13 {
             int related_bus_id = bus_ids[Array.IndexOf(waiting_times, min)];
             return related_bus_id*min;
         }
-        
-    }
+
 //---------------------------------part2----------------------------------
+
+
+//----------------------------main-methode--------------------------------
+
+        public static void Main() {
+            (string[] bus_list, float departure_timestamp) = ReadFromFile("advent_of_code_13.txt"); // der output dieser funktion ist ein tuple
+            var residues = residue_distance(bus_list, departure_timestamp); // der zeitliche abstand wird als rest kalkuliert
+
+            Console.WriteLine(calculate_min(residues, bus_list));
+        }
+    }
 
 }
