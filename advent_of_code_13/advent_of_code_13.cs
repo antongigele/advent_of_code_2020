@@ -20,6 +20,17 @@ namespace advent_of_code_13 {
             return(bus_list, departure_timestamp);
         }
 
+        public static int Non_x_Entries_Len(string[] bus_list) {
+            int len = 0;
+            //anzahl der einträge die nicht x sind
+            foreach (string e in bus_list) {
+                if (e != "x") {
+                    len++;
+                }
+            }
+            return len;
+        }
+
 //---------------------------------part1----------------------------------
         public static double[] residue_distance(string[] bus_list, float departure_timestamp) {
             double[] residues = new double[bus_list.Length];
@@ -39,15 +50,11 @@ namespace advent_of_code_13 {
         }
 
         public static int calculate_min(double[] residues, string[] bus_list) {
-            int len = 0;
-            //anzahl der einträge die nicht x sind
-            foreach (double e in residues) {
-                if (e != 0) {
-                    len++;
-                }
-            }
-            int[] waiting_times = new int[len];
-            int[] bus_ids = new int[len];
+            
+            var non_x_entries_len = Non_x_Entries_Len(bus_list);
+
+            int[] waiting_times = new int[non_x_entries_len];
+            int[] bus_ids = new int[non_x_entries_len];
             int w = 0;
             int b = 0;
             for (int i = 0; i < residues.Length; i++) {
@@ -64,15 +71,38 @@ namespace advent_of_code_13 {
         }
 
 //---------------------------------part2----------------------------------
+        public static (int[], int[]) congruences(string[] bus_list) {
+            var non_x_entries_len = Non_x_Entries_Len(bus_list);
 
+            int[] rests = new int[non_x_entries_len];
+            int[] moduli = new int[non_x_entries_len];
+            int r = 0;
+            int m = 0;
+            for (int i = 0; i < bus_list.Length; i++) {
+                if (bus_list[i] != "x") {
+                    rests[r] = i;
+                    r++;
+                    moduli[m] = int.Parse(bus_list[i]);
+                    m++;
+                }
+            }
+            return(rests, moduli);
+        }
 
 //----------------------------main-methode--------------------------------
 
         public static void Main() {
-            (string[] bus_list, float departure_timestamp) = ReadFromFile("advent_of_code_13.txt"); // der output dieser funktion ist ein tuple
+            (string[] bus_list, float departure_timestamp) = ReadFromFile("test_13.txt"); // der output dieser funktion ist ein tuple
+//---------------------------------part1----------------------------------            
             var residues = residue_distance(bus_list, departure_timestamp); // der zeitliche abstand wird als rest kalkuliert
-
+            
             Console.WriteLine(calculate_min(residues, bus_list));
+//---------------------------------part2----------------------------------
+            (int[] rests, int[] moduli) = congruences(bus_list);
+            for (int i = 0; i < rests.Length; i++) {
+                Console.WriteLine("x = " + rests[i] + " mod " + moduli[i]);
+            }
+            
         }
     }
 
