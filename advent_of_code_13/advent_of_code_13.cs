@@ -89,20 +89,68 @@ namespace advent_of_code_13 {
             return(rests, moduli);
         }
 
-//----------------------------main-methode--------------------------------
+        public static int gcd(int num1, int num2) {
+            if (num1 <= 0 || num2 <= 0) {
+                return 0;
+            }
+            else {
+                while (num1 != 0 && num2 != 0){
+                    if (num1 > num2) {
+                        num1 %= num2;
+                    }
+                    else {
+                        num2 %= num1;
+                    }
+                }
+                return num1 | num2;
+            }
+        }
 
+        public static double modInverse(double num, double mod) {
+            if (gcd((int)num,  (int)mod) != 1) { // die zahlen müssen teilerfremd sein
+                return 0;
+            }
+            double i = 1;
+            bool x_is_int = false;
+            while (x_is_int == false) {
+                
+                double x = (i*mod + 1)/num;
+                if (x == Math.Round(x, 0)) {
+                    x_is_int = true;
+                    return x;
+                }
+                else {
+                    i++;
+                }
+            }
+            return 0;
+        }
+
+        public static double solve_modulo_eqs() {
+            return 0;
+        }
+
+//----------------------------main-methode--------------------------------
         public static void Main() {
-            (string[] bus_list, float departure_timestamp) = ReadFromFile("test_13.txt"); // der output dieser funktion ist ein tuple
+            (string[] bus_list, float departure_timestamp) = ReadFromFile("advent_of_code_13.txt"); // der output dieser funktion ist ein tuple
 //---------------------------------part1----------------------------------            
-            var residues = residue_distance(bus_list, departure_timestamp); // der zeitliche abstand wird als rest kalkuliert
+            // var residues = residue_distance(bus_list, departure_timestamp); // der zeitliche abstand wird als rest kalkuliert
             
-            Console.WriteLine(calculate_min(residues, bus_list));
+            //Console.WriteLine(calculate_min(residues, bus_list));
 //---------------------------------part2----------------------------------
             (int[] rests, int[] moduli) = congruences(bus_list);
             for (int i = 0; i < rests.Length; i++) {
                 Console.WriteLine("x = " + rests[i] + " mod " + moduli[i]);
             }
-            
+
+
+
+            // Console.WriteLine(gcd(37, 587));
+            // Console.WriteLine(modInverse(8, 25));
+            // Console.WriteLine(modInverse(3, 11));
+            // Console.WriteLine(modInverse(13, 7));
+            // Console.WriteLine(modInverse(4, 12));
+//---------------------------------test----------------------------------
         }
     }
 
