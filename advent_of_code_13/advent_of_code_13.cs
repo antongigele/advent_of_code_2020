@@ -1,23 +1,41 @@
 using System;
 using System.IO;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace advent_of_code_13 {
     
     class advent_of_code_13 {
+        
+        public static int count_Lines(string path) {
+            var lineCount = 0;
+            using (var reader = File.OpenText(@path)) {
+                while (reader.ReadLine() != null) {
+                    lineCount++;
+                }
+            }
+            return lineCount;
+        }
 
         // function gibt ein tuple = (array, float) zurück
         public static (string[], float) ReadFromFile(string path, string sep = ",") {
-
             string[] lines = System.IO.File.ReadAllLines(@path);
-            float departure_timestamp = Int32.Parse(lines[0]);
+            
+            if (count_Lines(path) == 2) {
+                float departure_timestamp = Int32.Parse(lines[0]);
 
-            // create das bus array mit einem separator mit der split-methode
-            string separator = sep;
-            string[] bus_list = lines[1].Split(separator);
+                // create das bus array mit einem separator mit der split-methode
+                string separator = sep;
+                string[] bus_list = lines[1].Split(separator);
 
-            return(bus_list, departure_timestamp);
+                return(bus_list, departure_timestamp);
+            }
+            else {
+                string separator = sep;
+                string[] bus_list = lines[0].Split(separator);
+
+                return(bus_list, 0);
+            }
+
         }
 
         public static int Non_x_Entries_Len(string[] bus_list) {
@@ -105,69 +123,97 @@ namespace advent_of_code_13 {
                 return num1 | num2;
             }
         }
+        //-------Nicht skalierbare Lösung des Inversenproblems-------
+        // public static double modInverse(double num, double mod) {
+        //     if (gcd((long)num,  (long)mod) != 1) { // die zahlen müssen teilerfremd sein
+        //         Console.WriteLine("Numbers must be coprime");
+        //         return 0;
+        //     }
+        //     double i = 1;
+        //     bool x_is_int = false;
+        //     while (x_is_int == false) {
+                
+        //         double x = (i*mod + 1); 
+        //         // x = x/num; // <--- sehr rechenaufwändig! nicht scalable!
+        //         if (x) {
+        //             x_is_int = true;
+        //             return x;
+        //         }
+        //         else {
+        //             i++;
+        //         }
+        //     }
+        //     Console.WriteLine(i);
+        //     return 0;
+        // }
 
-        public static double modInverse(double num, double mod) {
-            if (gcd((long)num,  (long)mod) != 1) { // die zahlen müssen teilerfremd sein
-                Console.WriteLine("hello");
+        public static long modInverse(long a, long b) {
+            if (gcd((long)a,  (long)b) != 1) { // die zahlen müssen teilerfremd sein
+                Console.WriteLine("Numbers must be coprime");
                 return 0;
             }
-            double i = 1;
-            bool x_is_int = false;
-            while (x_is_int == false) {
-                
-                double x = (i*mod + 1)/num;
-                if (x == Math.Round(x, 0)) {
-                    // Console.WriteLine(x);
-                    x_is_int = true;
-                    return x;
-                }
-                else {
-                    i++;
-                }
+            // initialisierung der startwerte
+            long u = 1;
+            long v = 0; 
+            long s = 0; 
+            long t = 1;
+            long mod = (long)b;
+            while (b != 0) {
+                long a_before = a; // muss sein, da variablen-assignment syntax wie in python auf einer zeile nicht möglich ist
+                long u_before = u;
+                long v_before = v;
+
+                long q = a / b;
+                a = b; // da a neu assignt wird, muss in der nächsten zeile das alte a her, gilt auch für u und v
+                b = a_before - q*b;
+                u = s;
+                s = u_before - q*s;
+                v = t;
+                t = v_before - q*t;
             }
-            return 0;
+            if (u < 0) {
+                return u + mod;
+            }
+            else {
+                
+                return u;
+            }
         }
 
         public static double solve_modulo_eqs(int[] rests, int[] moduli) {
-            double M = 1;
-            double[] b_i_array = new double[moduli.Length];
-            double[] b_i_inverse_array = new double[moduli.Length];
+            long M = 1;
+            long[] b_i_array = new long[moduli.Length];
+            long[] b_i_inverse_array = new long[moduli.Length];
             for (int i = 0; i < moduli.Length; i++) {
                 M *= moduli[i]; // berechne M als produkt aller moduli
             }
             for (int i = 0; i < moduli.Length; i++) {
                 b_i_array[i] = M/moduli[i]; // berechne einzelne b_i's
-                Console.WriteLine(b_i_array[i]);
             }
             for (int i = 0; i < moduli.Length; i++) {
                 b_i_inverse_array[i] = modInverse(b_i_array[i], moduli[i]); // berechne einzelne jeweilige inverse zu den b_i's
-                
             }
-            return M;
+            long sum = 0;
+            for (int i = 0; i < moduli.Length; i++) {
+                sum += rests[i]*b_i_array[i]*b_i_inverse_array[i];
+            }
+            long result = sum % M; // ergebnis mod M
+            return M - result; // nimm das komplement von result als lösung für den frühesten timestamp
         }
 
 //----------------------------main-methode--------------------------------
         public static void Main() {
             (string[] bus_list, float departure_timestamp) = ReadFromFile("advent_of_code_13.txt"); // der output dieser funktion ist ein tuple
 //---------------------------------part1----------------------------------            
-            // var residues = residue_distance(bus_list, departure_timestamp); // der zeitliche abstand wird als rest kalkuliert
+            var residues = residue_distance(bus_list, departure_timestamp); // der zeitliche abstand wird als rest kalkuliert
             
-            //Console.WriteLine(calculate_min(residues, bus_list));
+            Console.WriteLine(calculate_min(residues, bus_list));
 //---------------------------------part2----------------------------------
             (int[] rests, int[] moduli) = congruences(bus_list);
             for (int i = 0; i < rests.Length; i++) {
                 Console.WriteLine("x = " + rests[i] + " mod " + moduli[i]);
             }
-            // Console.WriteLine(solve_modulo_eqs(rests, moduli));
-
-
-            // Console.WriteLine(gcd(37, 587));
-            // Console.WriteLine(modInverse(8, 25));
-            // Console.WriteLine(modInverse(3, 11));
-            // Console.WriteLine(modInverse(13, 7));
-            // Console.WriteLine(gcd(49408041734363, 37));
-            Console.WriteLine(modInverse(494080417, 37));
-//---------------------------------test----------------------------------
+            Console.WriteLine(solve_modulo_eqs(rests, moduli));
         }
     }
 
