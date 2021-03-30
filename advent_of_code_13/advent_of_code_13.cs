@@ -89,7 +89,7 @@ namespace advent_of_code_13 {
             return(rests, moduli);
         }
 
-        public static int gcd(int num1, int num2) {
+        public static long gcd(long num1, long num2) {
             if (num1 <= 0 || num2 <= 0) {
                 return 0;
             }
@@ -107,7 +107,8 @@ namespace advent_of_code_13 {
         }
 
         public static double modInverse(double num, double mod) {
-            if (gcd((int)num,  (int)mod) != 1) { // die zahlen müssen teilerfremd sein
+            if (gcd((long)num,  (long)mod) != 1) { // die zahlen müssen teilerfremd sein
+                Console.WriteLine("hello");
                 return 0;
             }
             double i = 1;
@@ -116,6 +117,7 @@ namespace advent_of_code_13 {
                 
                 double x = (i*mod + 1)/num;
                 if (x == Math.Round(x, 0)) {
+                    // Console.WriteLine(x);
                     x_is_int = true;
                     return x;
                 }
@@ -126,8 +128,22 @@ namespace advent_of_code_13 {
             return 0;
         }
 
-        public static double solve_modulo_eqs() {
-            return 0;
+        public static double solve_modulo_eqs(int[] rests, int[] moduli) {
+            double M = 1;
+            double[] b_i_array = new double[moduli.Length];
+            double[] b_i_inverse_array = new double[moduli.Length];
+            for (int i = 0; i < moduli.Length; i++) {
+                M *= moduli[i]; // berechne M als produkt aller moduli
+            }
+            for (int i = 0; i < moduli.Length; i++) {
+                b_i_array[i] = M/moduli[i]; // berechne einzelne b_i's
+                Console.WriteLine(b_i_array[i]);
+            }
+            for (int i = 0; i < moduli.Length; i++) {
+                b_i_inverse_array[i] = modInverse(b_i_array[i], moduli[i]); // berechne einzelne jeweilige inverse zu den b_i's
+                
+            }
+            return M;
         }
 
 //----------------------------main-methode--------------------------------
@@ -142,14 +158,15 @@ namespace advent_of_code_13 {
             for (int i = 0; i < rests.Length; i++) {
                 Console.WriteLine("x = " + rests[i] + " mod " + moduli[i]);
             }
-
+            // Console.WriteLine(solve_modulo_eqs(rests, moduli));
 
 
             // Console.WriteLine(gcd(37, 587));
             // Console.WriteLine(modInverse(8, 25));
             // Console.WriteLine(modInverse(3, 11));
             // Console.WriteLine(modInverse(13, 7));
-            // Console.WriteLine(modInverse(4, 12));
+            // Console.WriteLine(gcd(49408041734363, 37));
+            Console.WriteLine(modInverse(494080417, 37));
 //---------------------------------test----------------------------------
         }
     }
