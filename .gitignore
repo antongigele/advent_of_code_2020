@@ -4,3 +4,4 @@
 *.dll
 *.cache
 *.pdb
+.DS_Store
