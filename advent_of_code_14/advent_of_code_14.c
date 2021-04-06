@@ -26,32 +26,6 @@ char *lines_array (char *path) {
     fclose(file);
     return 0;
 }
-// char *lines_array (char *path) {
-//     // int count = count_file_len(path);
-//     // char *lines = malloc(550);
-//     char *lines[MAXCHAR][550];
-
-//     FILE *fp;
-//     char str[MAXCHAR];
-    
-//     fp = fopen(path, "r");
-//     // if (fp == NULL){
-//     //     printf("Could not open file %s", path);
-
-//     //     return 1;
-//     // }
-
-//     int i = 0;
-//     while (fgets(str, MAXCHAR, fp) != NULL)
-//         printf("%s", str);
-//         lines[i] = i;
-//         i++;
-
-//     fclose(fp);
-
-//     return lines;
-// }
-
 
 int count_file_len(char *path) {
     FILE *fp;
