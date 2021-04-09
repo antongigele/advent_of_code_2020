@@ -51,9 +51,7 @@ def memory_dict(dict_list):
             first_value = next(value_iterator)
             first_key = next(iter(dict_list[i]))
 
-            # print(bin_to_dec(apply_mask(mask, first_value)))
-            # print(first_key)
-            mem_dict.update({first_key : bin_to_dec(apply_mask(mask, first_value))})
+            mem_dict.update({first_key : bin_to_dec(apply_mask(mask, first_value))}) # dict jedes mal um key-value pair erweitern
 
     return mem_dict
 
