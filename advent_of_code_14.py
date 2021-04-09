@@ -52,7 +52,6 @@ def memory_dict(dict_list):
             first_key = next(iter(dict_list[i]))
 
             mem_dict.update({first_key : bin_to_dec(apply_mask(mask, first_value))}) # dict jedes mal um key-value pair erweitern
-
     return mem_dict
 
 def sum_memory_values(mem_dict):
