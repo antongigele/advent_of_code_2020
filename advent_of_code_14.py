@@ -98,8 +98,8 @@ def mem_adr_dict(dict_list):
             first_value = next(value_iterator)
             first_key = next(iter(dict_list[i]))
 
-            mem_adr = gen_adr_list(apply_mask_with_X(mask, first_key), mem_adr = [])
-            mem_adr = [bin_to_dec(e) for e in mem_adr]
+            mem_adr = gen_adr_list(apply_mask_with_X(mask, first_key), mem_adr = []) # adressenliste, "mem_adr" muss dabei immer wieder erneut leer gesetzt werden 
+            mem_adr = [bin_to_dec(e) for e in mem_adr] # wieder in decimal umwandeln
 
             for a in mem_adr:
                 output_dict.update({a : first_value}) # dictionary wird immer upgedated: neue werte dazuschreiben oder alte überschreiben
