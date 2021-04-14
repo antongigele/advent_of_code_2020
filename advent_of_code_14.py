@@ -79,8 +79,8 @@ def apply_mask_with_X(mask, decimal): # wendet die maske an, mask ist ein string
 
 def gen_adr_list(s, mem_adr = []):
     if 'X' in s:
-        s1 = s.replace('X','0',1) #only replace once
-        s2 = s.replace('X','1',1) #only replace once
+        s1 = s.replace('X','0',1) #nur einmal ersetzen
+        s2 = s.replace('X','1',1) #nur einmal ersetzen
         gen_adr_list(s1, mem_adr)
         gen_adr_list(s2, mem_adr)
     else: mem_adr.append(s)
