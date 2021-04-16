@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdint.h>
 
-#define MAXCHAR 45 // maximale länge der Zeilen
+#define MAXCHAR 50 // maximale länge der Zeilen + 5
 
 #define LSIZ 45 
 
@@ -47,6 +47,23 @@ int count_file_len(char *path) {
     fclose(fp);
 
     return count;
+}
+
+int **matrix_sum(int matrix1[][3], int matrix2[][3]){
+    int i, j;
+    int **matrix3;
+    matrix3 = malloc(sizeof(int*) * 3);
+     
+    for(i = 0; i < 3; i++) {
+        matrix3[i] = malloc(sizeof(int*) * 3);
+    }
+ 
+    for(i = 0; i < 3; i++){
+        for(j = 0; j < 3; j++){
+            matrix3[i][j] = matrix1[i][j] + matrix2[i][j];
+        }
+    }
+    return matrix3;
 }
 
 // void create_Array() {
@@ -93,7 +110,7 @@ int main() {
     // // char *p = lines_array(path);
 
     //--------------------------------------------//
-	char fname[50];
+	char fname[MAXCHAR];
     FILE *fptr = NULL; 
     int i = 0;
     int tot = 0;
@@ -116,10 +133,11 @@ int main() {
     }
     tot = i;
 	printf("\n The contents of the file %s  are : \n",fname);    
-    for(i = 0; i < tot; ++i)
-    {
-        printf(" %s\n", line[i]);
-    }
+    // for(i = 0; i < tot; ++i)
+    // {
+    //     printf(" %s\n", line[i]);
+    // }
+    printf("%s\n", line[1]);
     printf("\n");
     return 0;
 }
