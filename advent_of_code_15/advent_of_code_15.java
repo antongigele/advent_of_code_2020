@@ -35,17 +35,16 @@ public class advent_of_code_15 {
         }
         return dict;
     }
-
+    // Die Funktion ist noch nicht vollständig
     public static HashMap<Integer, String> eval_last_entry(HashMap<Integer, String> input_dict) {
         String last_value = input_dict.get(input_dict.size()-1);
-        HashMap<Integer, String> narrowed_input_dict = new HashMap<Integer, String>(input_dict); 
-        narrowed_input_dict.remove(input_dict.size()-1);
-        // System.out.println(narrowed_input_dict);
+        HashMap<Integer, String> narrowed_input_dict = new HashMap<Integer, String>(input_dict); // kopie erstellen
+        narrowed_input_dict.remove(input_dict.size()-1); // letzten eintrag aus der kopie löschen damit die kopie nach diesem dann durchsucht werden kann
         if (narrowed_input_dict.containsValue(last_value) == false) {
             input_dict.put(input_dict.size(), "0"); // erstmal schauen ob der value überhaupt vorkommt
         }
         else {
-            for(HashMap.Entry<Integer, String>item : narrowed_input_dict.entrySet()) {
+            for(HashMap.Entry<Integer, String>item : narrowed_input_dict.entrySet()) { // durch hashmap mit key-values iterieren
 
                 if (item.getValue().equals(last_value) == true) {
                     int value = input_dict.size()-1 - item.getKey(); // der last_value hat in diesem fall immer die größe-1 als key
@@ -54,10 +53,20 @@ public class advent_of_code_15 {
                 else {
                     ;
                 }
-    
             }
         }
         return input_dict;
+    }
+
+    public static HashMap<Integer, String> HashMapRecursion(int ending_point, HashMap<Integer, String> dictionary) {
+        if (dictionary.size() < ending_point) {
+            HashMap<Integer, String> eval_dict = eval_last_entry(dictionary);
+            return HashMapRecursion(ending_point, eval_dict);
+        }
+        else {
+            System.out.println(dictionary.get(ending_point));
+            return dictionary;
+        }
     }
 
     public static void main(String[] args) {
@@ -72,9 +81,10 @@ public class advent_of_code_15 {
         HashMap<Integer, String> dictionary = create_dict(input_array);
 
         // Rekursion notwendig
-        HashMap<Integer, String> recursive = new HashMap<Integer, String>(eval_last_entry(dictionary));
-        HashMap<Integer, String> recursive2 = new HashMap<Integer, String>(eval_last_entry(recursive));
-        System.out.println(eval_last_entry(recursive2));
+        // HashMap<Integer, String> recursive = new HashMap<Integer, String>(eval_last_entry(dictionary));
+        // HashMap<Integer, String> recursive2 = eval_last_entry(recursive);
+        // System.out.println(eval_last_entry(recursive2));
+        System.out.println(HashMapRecursion(2020, dictionary));
 
     }
 }
