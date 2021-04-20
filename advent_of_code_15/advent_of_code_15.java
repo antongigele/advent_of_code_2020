@@ -37,27 +37,26 @@ public class advent_of_code_15 {
     }
 
     public static HashMap<Integer, String> eval_last_entry(HashMap<Integer, String> input_dict) {
-        String last_value = input_dict.get(input_dict.size());
-    HashMap<Integer, String> narrowed_input_dict = input_dict; // fehler!!! reference copy
+        String last_value = input_dict.get(input_dict.size()-1);
+        HashMap<Integer, String> narrowed_input_dict = new HashMap<Integer, String>(input_dict); 
         narrowed_input_dict.remove(input_dict.size()-1);
-        System.out.println(narrowed_input_dict);
+        // System.out.println(narrowed_input_dict);
         if (narrowed_input_dict.containsValue(last_value) == false) {
-            input_dict.put(8, "0");
+            input_dict.put(input_dict.size(), "0"); // erstmal schauen ob der value überhaupt vorkommt
         }
-        // else {
-        //         int j = 0;
-        //     for(String i : narrowed_input_dict.values()) {
-        //         System.out.println(i);
-        //         if (i == last_value) {
-        //             System.out.println(narrowed_input_dict.get(j));
-        //         }
-        //         else {
-        //             System.out.println(j);
-        //             continue;
-        //         }
-        //         j++;
-        //     }
-        // }
+        else {
+            for(HashMap.Entry<Integer, String>item : narrowed_input_dict.entrySet()) {
+
+                if (item.getValue().equals(last_value) == true) {
+                    int value = input_dict.size()-1 - item.getKey(); // der last_value hat in diesem fall immer die größe-1 als key
+                    input_dict.put(input_dict.size(), Integer.toString(value));
+                }
+                else {
+                    ;
+                }
+    
+            }
+        }
         return input_dict;
     }
 
@@ -72,9 +71,10 @@ public class advent_of_code_15 {
         // Dictionary erstellen
         HashMap<Integer, String> dictionary = create_dict(input_array);
 
-        // System.out.println(create_dict(input_array).toString()); // toString Methode notwendig
-        // dictionary.put(11, "0");
-        System.out.println(eval_last_entry(dictionary));
-        // System.out.println(dictionary);
+        // Rekursion notwendig
+        HashMap<Integer, String> recursive = new HashMap<Integer, String>(eval_last_entry(dictionary));
+        HashMap<Integer, String> recursive2 = new HashMap<Integer, String>(eval_last_entry(recursive));
+        System.out.println(eval_last_entry(recursive2));
+
     }
 }
