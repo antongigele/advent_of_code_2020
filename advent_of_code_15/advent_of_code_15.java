@@ -1,7 +1,6 @@
 import java.io.*;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class advent_of_code_15 {
@@ -16,7 +15,8 @@ public class advent_of_code_15 {
             
             }
             reader.close();
-        } catch (FileNotFoundException e) {
+        } 
+        catch (FileNotFoundException e) {
             e.printStackTrace();
             return "File not found";
         }
@@ -35,20 +35,30 @@ public class advent_of_code_15 {
         }
         return dict;
     }
-    // Die Funktion ist noch nicht vollständig
+    // Die Funktion hat noch einen fehler
     public static HashMap<Integer, String> eval_last_entry(HashMap<Integer, String> input_dict) {
-        String last_value = input_dict.get(input_dict.size()-1);
+        // den letzten key-value-pair holen
+        int last_key = 0;
+        for (int key: input_dict.keySet()) {
+            last_key = key;
+        }
+        String last_value = input_dict.get(last_key);
+        // System.out.println(Integer.toString(last_key) + " " + last_value);
+        
         HashMap<Integer, String> narrowed_input_dict = new HashMap<Integer, String>(input_dict); // kopie erstellen
-        narrowed_input_dict.remove(input_dict.size()-1); // letzten eintrag aus der kopie löschen damit die kopie nach diesem dann durchsucht werden kann
+        narrowed_input_dict.remove(last_key); // letzten eintrag aus der kopie löschen damit die kopie nach diesem dann durchsucht werden kann
         if (narrowed_input_dict.containsValue(last_value) == false) {
-            input_dict.put(input_dict.size(), "0"); // erstmal schauen ob der value überhaupt vorkommt
+            input_dict.put(last_key+1, "0"); // erstmal schauen ob der value überhaupt vorkommt
         }
         else {
-            for(HashMap.Entry<Integer, String>item : narrowed_input_dict.entrySet()) { // durch hashmap mit key-values iterieren
+            for (HashMap.Entry<Integer, String>item : narrowed_input_dict.entrySet()) { // durch hashmap mit key-values iterieren
 
                 if (item.getValue().equals(last_value) == true) {
-                    int value = input_dict.size()-1 - item.getKey(); // der last_value hat in diesem fall immer die größe-1 als key
-                    input_dict.put(input_dict.size(), Integer.toString(value));
+                    int value = last_key - item.getKey(); // <--- guter trick! funktioniert hier aber nicht. der last_value hat in diesem fall immer die größe-1 als key
+                    input_dict.put(last_key+1, Integer.toString(value));
+                    // input_dict.put(item.getKey(), "");
+                    input_dict.remove(item.getKey()); // funktioniert aus irgendeinem Grund nicht
+                    break;
                 }
                 else {
                     ;
@@ -64,7 +74,7 @@ public class advent_of_code_15 {
             return HashMapRecursion(ending_point, eval_dict);
         }
         else {
-            System.out.println(dictionary.get(ending_point));
+            System.out.println(dictionary.get(ending_point-1));
             return dictionary;
         }
     }
@@ -79,12 +89,23 @@ public class advent_of_code_15 {
 
         // Dictionary erstellen
         HashMap<Integer, String> dictionary = create_dict(input_array);
-
+        // System.out.println(dictionary);
         // Rekursion notwendig
-        // HashMap<Integer, String> recursive = new HashMap<Integer, String>(eval_last_entry(dictionary));
+        // HashMap<Integer, String> recursive = eval_last_entry(dictionary);
         // HashMap<Integer, String> recursive2 = eval_last_entry(recursive);
+        // HashMap<Integer, String> recursive3 = eval_last_entry(recursive2);
+        // HashMap<Integer, String> recursive4 = eval_last_entry(recursive3);
+        // HashMap<Integer, String> recursive5 = eval_last_entry(recursive4);
+        // System.out.println(recursive5);
+        // recursive5.remove(0);
+        // recursive5.remove(1);
+        // recursive5.remove(4);
+        // System.out.println(recursive5);
+        // HashMap<Integer, String> recursive6 = eval_last_entry(recursive5);
+        // HashMap<Integer, String> recursive7 = eval_last_entry(recursive6);
+        // System.out.println(recursive6);
         // System.out.println(eval_last_entry(recursive2));
-        System.out.println(HashMapRecursion(2020, dictionary));
+        System.out.println(HashMapRecursion(70, dictionary));
 
     }
 }
