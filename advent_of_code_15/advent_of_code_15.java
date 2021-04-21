@@ -1,7 +1,7 @@
 import java.io.*;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-import java.util.HashMap;
+import java.util.*;
 
 public class advent_of_code_15 {
 
@@ -28,15 +28,15 @@ public class advent_of_code_15 {
         return str_arr;
     }
 
-    public static HashMap<Integer, String> create_dict(String[] input_array) {
-        HashMap<Integer, String> dict = new HashMap<Integer, String>();
+    public static LinkedHashMap<Integer, String> create_dict(String[] input_array) {
+        LinkedHashMap<Integer, String> dict = new LinkedHashMap<Integer, String>();
         for(int i = 0; i < input_array.length; i++) {
             dict.put(i, input_array[i]);
         }
         return dict;
     }
     // Die Funktion hat noch einen fehler
-    public static HashMap<Integer, String> eval_last_entry(HashMap<Integer, String> input_dict) {
+    public static LinkedHashMap<Integer, String> eval_last_entry(LinkedHashMap<Integer, String> input_dict) {
         // den letzten key-value-pair holen
         int last_key = 0;
         for (int key: input_dict.keySet()) {
@@ -45,16 +45,16 @@ public class advent_of_code_15 {
         String last_value = input_dict.get(last_key);
         // System.out.println(Integer.toString(last_key) + " " + last_value);
         
-        HashMap<Integer, String> narrowed_input_dict = new HashMap<Integer, String>(input_dict); // kopie erstellen
+        LinkedHashMap<Integer, String> narrowed_input_dict = new LinkedHashMap<Integer, String>(input_dict); // kopie erstellen
         narrowed_input_dict.remove(last_key); // letzten eintrag aus der kopie löschen damit die kopie nach diesem dann durchsucht werden kann
         if (narrowed_input_dict.containsValue(last_value) == false) {
             input_dict.put(last_key+1, "0"); // erstmal schauen ob der value überhaupt vorkommt
         }
         else {
-            for (HashMap.Entry<Integer, String>item : narrowed_input_dict.entrySet()) { // durch hashmap mit key-values iterieren
+            for (Map.Entry<Integer, String>item : narrowed_input_dict.entrySet()) { // durch LinkedHashMap mit key-values iterieren
 
                 if (item.getValue().equals(last_value) == true) {
-                    int value = last_key - item.getKey(); // <--- guter trick! funktioniert hier aber nicht. der last_value hat in diesem fall immer die größe-1 als key
+                    int value = last_key - item.getKey();
                     input_dict.put(last_key+1, Integer.toString(value));
                     // input_dict.put(item.getKey(), "");
                     input_dict.remove(item.getKey()); // funktioniert aus irgendeinem Grund nicht
@@ -68,10 +68,19 @@ public class advent_of_code_15 {
         return input_dict;
     }
 
-    public static HashMap<Integer, String> HashMapRecursion(int ending_point, HashMap<Integer, String> dictionary) {
-        if (dictionary.size() < ending_point) {
-            HashMap<Integer, String> eval_dict = eval_last_entry(dictionary);
-            return HashMapRecursion(ending_point, eval_dict);
+    public static LinkedHashMap<Integer, String> LinkedHashMapRecursion(int counter, int ending_point, LinkedHashMap<Integer, String> dictionary) {
+        counter++;
+        if (counter < ending_point) {
+            System.out.println(counter);
+            LinkedHashMap<Integer, String> eval_dict = eval_last_entry(dictionary);
+            try {
+                return LinkedHashMapRecursion(counter, ending_point, eval_dict);
+            }
+            catch (Exception e) {
+                System.out.println(e);
+                return dictionary;
+            }
+        
         }
         else {
             System.out.println(dictionary.get(ending_point-1));
@@ -88,24 +97,24 @@ public class advent_of_code_15 {
         input_array = stringToArray(string_data, ",");
 
         // Dictionary erstellen
-        HashMap<Integer, String> dictionary = create_dict(input_array);
+        LinkedHashMap<Integer, String> dictionary = create_dict(input_array);
         // System.out.println(dictionary);
         // Rekursion notwendig
-        // HashMap<Integer, String> recursive = eval_last_entry(dictionary);
-        // HashMap<Integer, String> recursive2 = eval_last_entry(recursive);
-        // HashMap<Integer, String> recursive3 = eval_last_entry(recursive2);
-        // HashMap<Integer, String> recursive4 = eval_last_entry(recursive3);
-        // HashMap<Integer, String> recursive5 = eval_last_entry(recursive4);
+        // LinkedHashMap<Integer, String> recursive = eval_last_entry(dictionary);
+        // LinkedHashMap<Integer, String> recursive2 = eval_last_entry(recursive);
+        // LinkedHashMap<Integer, String> recursive3 = eval_last_entry(recursive2);
+        // LinkedHashMap<Integer, String> recursive4 = eval_last_entry(recursive3);
+        // LinkedHashMap<Integer, String> recursive5 = eval_last_entry(recursive4);
         // System.out.println(recursive5);
         // recursive5.remove(0);
         // recursive5.remove(1);
         // recursive5.remove(4);
         // System.out.println(recursive5);
-        // HashMap<Integer, String> recursive6 = eval_last_entry(recursive5);
-        // HashMap<Integer, String> recursive7 = eval_last_entry(recursive6);
+        // LinkedHashMap<Integer, String> recursive6 = eval_last_entry(recursive5);
+        // LinkedHashMap<Integer, String> recursive7 = eval_last_entry(recursive6);
         // System.out.println(recursive6);
         // System.out.println(eval_last_entry(recursive2));
-        System.out.println(HashMapRecursion(70, dictionary));
-
+        // int[] numbers = new int[]{0,0};
+        LinkedHashMapRecursion(0, 2020, dictionary);
     }
 }
