@@ -89,19 +89,27 @@ public class advent_of_code_15 {
     }
 
     public static void main(String[] args) {
-        // File einlesen
-        String string_data = readFileAsString("test_1.txt");
+        // // File einlesen
+        // String string_data = readFileAsString("test_1.txt");
 
-        // File-Werte in array umwandeln
-        String[] input_array;
-        input_array = stringToArray(string_data, ",");
-
-        // Dictionary erstellen
-        LinkedHashMap<Integer, String> dictionary = create_dict(input_array);
+        // // File-Werte in array umwandeln
+        // String[] input_array;
+        // input_array = stringToArray(string_data, ",");
+        //---------------------------part1---------------------------
+        // // Dictionary erstellen
+        // LinkedHashMap<Integer, String> dictionary = create_dict(input_array);
         // System.out.println(dictionary);
         // LinkedHashMap<Integer, String> recursive = eval_last_entry(dictionary);
         // LinkedHashMap<Integer, String> recursive2 = eval_last_entry(recursive);
         // System.out.println(recursive5);
-        LinkedHashMapRecursion(0, 2020, dictionary);
+        // LinkedHashMapRecursion(0, 2020, dictionary);
+        //---------------------------part2---------------------------
+        int l = 0;
+        ArrayList<String> numbers = new ArrayList<String>();
+        for (int i = 0; i < 30000000; i++) {
+            l += i;
+            numbers.add("Hello" + Integer.toString(l));
+        }
+        System.out.println(numbers.get(29000000));
     }
 }
