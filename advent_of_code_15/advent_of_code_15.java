@@ -99,22 +99,9 @@ public class advent_of_code_15 {
         // Dictionary erstellen
         LinkedHashMap<Integer, String> dictionary = create_dict(input_array);
         // System.out.println(dictionary);
-        // Rekursion notwendig
         // LinkedHashMap<Integer, String> recursive = eval_last_entry(dictionary);
         // LinkedHashMap<Integer, String> recursive2 = eval_last_entry(recursive);
-        // LinkedHashMap<Integer, String> recursive3 = eval_last_entry(recursive2);
-        // LinkedHashMap<Integer, String> recursive4 = eval_last_entry(recursive3);
-        // LinkedHashMap<Integer, String> recursive5 = eval_last_entry(recursive4);
         // System.out.println(recursive5);
-        // recursive5.remove(0);
-        // recursive5.remove(1);
-        // recursive5.remove(4);
-        // System.out.println(recursive5);
-        // LinkedHashMap<Integer, String> recursive6 = eval_last_entry(recursive5);
-        // LinkedHashMap<Integer, String> recursive7 = eval_last_entry(recursive6);
-        // System.out.println(recursive6);
-        // System.out.println(eval_last_entry(recursive2));
-        // int[] numbers = new int[]{0,0};
         LinkedHashMapRecursion(0, 2020, dictionary);
     }
 }
