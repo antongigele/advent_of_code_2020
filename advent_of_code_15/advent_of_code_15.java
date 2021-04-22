@@ -89,12 +89,38 @@ public class advent_of_code_15 {
     }
     //---------------------------part2---------------------------
     public static ArrayList<Integer> array_to_int_arraylist(String[] input_array) {
-        ArrayList<Integer> numbers_game = new ArrayList<Integer>();
+        ArrayList<Integer> array_list = new ArrayList<Integer>();
         for (String s : input_array) {
-            numbers_game.add(Integer.parseInt(s));
+            array_list.add(Integer.parseInt(s));
         }
-        return numbers_game;
-    } 
+        return array_list;
+    }
+
+    public static void eval_last_entry_2(ArrayList<Integer> numbers_game, int last_index) {
+        // int last_index = numbers_game.size()-1
+        int last_ent = numbers_game.get(last_index);
+        numbers_game.remove(last_index);
+        if (numbers_game.contains(last_ent) == true) {
+            int prev_index = numbers_game.indexOf(last_ent);
+            numbers_game.add(last_index, last_ent);
+            numbers_game.add(last_index+1, last_index-prev_index);
+            numbers_game.set(prev_index, null);
+            // System.out.println(Integer.toString(last_index-prev_index) + " added to the end");
+        }
+        else {
+            numbers_game.add(last_index, last_ent);
+            numbers_game.add(last_index+1, 0);
+            // System.out.println("0 added to the end");
+        }
+    }
+
+    public static int grow_list(ArrayList<Integer> numbers_game, int nth_number) {
+        for (int i = numbers_game.size()-1; i < nth_number; i++) {
+            eval_last_entry_2(numbers_game, i);
+        }
+        return numbers_game.get(nth_number-1);
+    }
+
     public static void main(String[] args) {
         // File einlesen
         String string_data = readFileAsString("test_1.txt");
@@ -112,14 +138,27 @@ public class advent_of_code_15 {
         //---------------------------part2---------------------------
         ArrayList<Integer> numbers_game = new ArrayList<Integer>();
         numbers_game = array_to_int_arraylist(input_array);
-        System.out.println(numbers_game);
-        // System.gc(); garbage collector
-        // int l = 0;
-        // ArrayList<Integer> numbers = new ArrayList<Integer>();
-        // for (int i = 0; i < 30000000; i++) {
-        //     l = i + 2;
-        //     numbers.add(l);
-        // }
-        // System.out.println(numbers.get(29000000));
+        // eval_last_entry_2(numbers_game, 2); // 0,3,6,0
+        // skalierbar auf 300 000
+        long startTime = System.nanoTime();
+        System.out.println(grow_list(numbers_game, 300));
+        long endTime = System.nanoTime();
+        System.out.println("elapsed time:");
+        System.out.println(endTime - startTime);
+
+        long startTime1 = System.nanoTime();
+        System.out.println(grow_list(numbers_game, 3000));
+        long endTime1 = System.nanoTime();
+        System.out.println("elapsed time:");
+        System.out.println(endTime1 - startTime1);
+
+        long startTime2 = System.nanoTime();
+        System.out.println(grow_list(numbers_game, 30000));
+        long endTime2 = System.nanoTime();
+        System.out.println("elapsed time:");
+        System.out.println(endTime2 - startTime2);
+ 
+        // get the difference between the two nano time values
+        // can i give him also 0,3,6,0,3,3,1,0,4,0   ?
     }
 }
