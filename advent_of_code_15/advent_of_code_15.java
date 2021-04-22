@@ -97,7 +97,6 @@ public class advent_of_code_15 {
     }
 
     public static void eval_last_entry_2(ArrayList<Integer> numbers_game, int last_index) {
-        // int last_index = numbers_game.size()-1
         int last_ent = numbers_game.get(last_index);
         numbers_game.remove(last_index);
         if (numbers_game.contains(last_ent) == true) {
@@ -114,11 +113,24 @@ public class advent_of_code_15 {
         }
     }
 
-    public static int grow_list(ArrayList<Integer> numbers_game, int nth_number) {
+    public static void clean_arraylist(ArrayList<Integer> arraylist, int i) {
+        if ( i%1000 == 0) {
+            int j = 0;
+            while ( arraylist.get(j) == null) {
+                arraylist.remove(j);
+                j++;
+            }
+        }
+        
+    }
+
+    public static ArrayList<Integer> grow_list(ArrayList<Integer> numbers_game, int nth_number) {
         for (int i = numbers_game.size()-1; i < nth_number; i++) {
             eval_last_entry_2(numbers_game, i);
+            clean_arraylist(numbers_game, i);
         }
-        return numbers_game.get(nth_number-1);
+        return numbers_game;
+        // return numbers_game.get(nth_number-1);
     }
 
     public static void main(String[] args) {
@@ -140,24 +152,13 @@ public class advent_of_code_15 {
         numbers_game = array_to_int_arraylist(input_array);
         // eval_last_entry_2(numbers_game, 2); // 0,3,6,0
         // skalierbar auf 300 000
-        long startTime = System.nanoTime();
-        System.out.println(grow_list(numbers_game, 300));
-        long endTime = System.nanoTime();
-        System.out.println("elapsed time:");
-        System.out.println(endTime - startTime);
 
         long startTime1 = System.nanoTime();
-        System.out.println(grow_list(numbers_game, 3000));
+        System.out.println(grow_list(numbers_game, 300));
         long endTime1 = System.nanoTime();
         System.out.println("elapsed time:");
         System.out.println(endTime1 - startTime1);
 
-        long startTime2 = System.nanoTime();
-        System.out.println(grow_list(numbers_game, 30000));
-        long endTime2 = System.nanoTime();
-        System.out.println("elapsed time:");
-        System.out.println(endTime2 - startTime2);
- 
         // get the difference between the two nano time values
         // can i give him also 0,3,6,0,3,3,1,0,4,0   ?
     }
