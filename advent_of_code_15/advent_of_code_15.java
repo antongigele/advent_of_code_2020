@@ -27,7 +27,7 @@ public class advent_of_code_15 {
         String[] str_arr = str.split(sep);
         return str_arr;
     }
-
+    //---------------------------part1---------------------------
     public static LinkedHashMap<Integer, String> create_dict(String[] input_array) {
         LinkedHashMap<Integer, String> dict = new LinkedHashMap<Integer, String>();
         for(int i = 0; i < input_array.length; i++) {
@@ -87,29 +87,39 @@ public class advent_of_code_15 {
             return dictionary;
         }
     }
-
+    //---------------------------part2---------------------------
+    public static ArrayList<Integer> array_to_int_arraylist(String[] input_array) {
+        ArrayList<Integer> numbers_game = new ArrayList<Integer>();
+        for (String s : input_array) {
+            numbers_game.add(Integer.parseInt(s));
+        }
+        return numbers_game;
+    } 
     public static void main(String[] args) {
-        // // File einlesen
-        // String string_data = readFileAsString("test_1.txt");
+        // File einlesen
+        String string_data = readFileAsString("test_1.txt");
 
-        // // File-Werte in array umwandeln
-        // String[] input_array;
-        // input_array = stringToArray(string_data, ",");
+        // File-Werte in array umwandeln
+        String[] input_array;
+        input_array = stringToArray(string_data, ",");
         //---------------------------part1---------------------------
         // // Dictionary erstellen
         // LinkedHashMap<Integer, String> dictionary = create_dict(input_array);
         // System.out.println(dictionary);
         // LinkedHashMap<Integer, String> recursive = eval_last_entry(dictionary);
         // LinkedHashMap<Integer, String> recursive2 = eval_last_entry(recursive);
-        // System.out.println(recursive5);
         // LinkedHashMapRecursion(0, 2020, dictionary);
         //---------------------------part2---------------------------
-        int l = 0;
-        ArrayList<String> numbers = new ArrayList<String>();
-        for (int i = 0; i < 30000000; i++) {
-            l += i;
-            numbers.add("Hello" + Integer.toString(l));
-        }
-        System.out.println(numbers.get(29000000));
+        ArrayList<Integer> numbers_game = new ArrayList<Integer>();
+        numbers_game = array_to_int_arraylist(input_array);
+        System.out.println(numbers_game);
+        // System.gc(); garbage collector
+        // int l = 0;
+        // ArrayList<Integer> numbers = new ArrayList<Integer>();
+        // for (int i = 0; i < 30000000; i++) {
+        //     l = i + 2;
+        //     numbers.add(l);
+        // }
+        // System.out.println(numbers.get(29000000));
     }
 }
