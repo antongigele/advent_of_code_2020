@@ -27,15 +27,15 @@ public class advent_of_code_15 {
         String[] str_arr = str.split(sep);
         return str_arr;
     }
-    //---------------------------part1---------------------------
-    public static LinkedHashMap<Integer, String> create_dict(String[] input_array) {
-        LinkedHashMap<Integer, String> dict = new LinkedHashMap<Integer, String>();
+
+    public static LinkedHashMap<Integer, Integer> create_dict(String[] input_array) {
+        LinkedHashMap<Integer, Integer> dict = new LinkedHashMap<Integer, Integer>();
         for(int i = 0; i < input_array.length; i++) {
-            dict.put(i, input_array[i]);
+            dict.put(i, Integer.parseInt(input_array[i]));
         }
         return dict;
     }
-    // Die Funktion hat noch einen fehler
+    //---------------------------part1---------------------------
     public static LinkedHashMap<Integer, String> eval_last_entry(LinkedHashMap<Integer, String> input_dict) {
         // den letzten key-value-pair holen
         int last_key = 0;
@@ -88,49 +88,35 @@ public class advent_of_code_15 {
         }
     }
     //---------------------------part2---------------------------
-    public static ArrayList<Integer> array_to_int_arraylist(String[] input_array) {
-        ArrayList<Integer> array_list = new ArrayList<Integer>();
-        for (String s : input_array) {
-            array_list.add(Integer.parseInt(s));
-        }
-        return array_list;
-    }
-
-    public static void eval_last_entry_2(ArrayList<Integer> numbers_game, int last_index) {
-        int last_ent = numbers_game.get(last_index);
+    public static void eval_last_entry_2(LinkedHashMap<Integer, Integer> numbers_game, int last_index) {
+        int last_val = numbers_game.get(last_index);
         numbers_game.remove(last_index);
-        if (numbers_game.contains(last_ent) == true) {
-            int prev_index = numbers_game.indexOf(last_ent);
-            numbers_game.add(last_index, last_ent);
-            numbers_game.add(last_index+1, last_index-prev_index);
-            numbers_game.set(prev_index, null);
+        if (numbers_game.values().contains(last_val) == true) { // <<--------- langsam
+            int prev_index = 0;
+            for (Map.Entry<Integer, Integer> entry : numbers_game.entrySet()) {
+                if (entry.getValue().equals(last_val)) {
+                    prev_index = entry.getKey();
+                    break;
+                }
+            }
+            numbers_game.put(last_index, last_val);
+            numbers_game.put(last_index+1, last_index-prev_index);
+            numbers_game.remove(prev_index);
             // System.out.println(Integer.toString(last_index-prev_index) + " added to the end");
         }
         else {
-            numbers_game.add(last_index, last_ent);
-            numbers_game.add(last_index+1, 0);
+            numbers_game.put(last_index, last_val);
+            numbers_game.put(last_index+1, 0);
             // System.out.println("0 added to the end");
         }
     }
 
-    public static void clean_arraylist(ArrayList<Integer> arraylist, int i) {
-        if ( i%1000 == 0) {
-            int j = 0;
-            while ( arraylist.get(j) == null) {
-                arraylist.remove(j);
-                j++;
-            }
-        }
-        
-    }
-
-    public static ArrayList<Integer> grow_list(ArrayList<Integer> numbers_game, int nth_number) {
+    public static int grow_list(LinkedHashMap<Integer, Integer> numbers_game, int nth_number) {
         for (int i = numbers_game.size()-1; i < nth_number; i++) {
             eval_last_entry_2(numbers_game, i);
-            clean_arraylist(numbers_game, i);
         }
-        return numbers_game;
-        // return numbers_game.get(nth_number-1);
+        // return numbers_game;
+        return numbers_game.get(nth_number-1);
     }
 
     public static void main(String[] args) {
@@ -141,25 +127,24 @@ public class advent_of_code_15 {
         String[] input_array;
         input_array = stringToArray(string_data, ",");
         //---------------------------part1---------------------------
-        // // Dictionary erstellen
-        // LinkedHashMap<Integer, String> dictionary = create_dict(input_array);
-        // System.out.println(dictionary);
+        // Dictionary erstellen
         // LinkedHashMap<Integer, String> recursive = eval_last_entry(dictionary);
         // LinkedHashMap<Integer, String> recursive2 = eval_last_entry(recursive);
         // LinkedHashMapRecursion(0, 2020, dictionary);
         //---------------------------part2---------------------------
-        ArrayList<Integer> numbers_game = new ArrayList<Integer>();
-        numbers_game = array_to_int_arraylist(input_array);
-        // eval_last_entry_2(numbers_game, 2); // 0,3,6,0
-        // skalierbar auf 300 000
-
-        long startTime1 = System.nanoTime();
-        System.out.println(grow_list(numbers_game, 300));
-        long endTime1 = System.nanoTime();
-        System.out.println("elapsed time:");
-        System.out.println(endTime1 - startTime1);
-
-        // get the difference between the two nano time values
-        // can i give him also 0,3,6,0,3,3,1,0,4,0   ?
+        LinkedHashMap<Integer, Integer> numbers_game = create_dict(input_array);
+        // eval_last_entry_2(numbers_game, 2);
+        // eval_last_entry_2(numbers_game, 3);
+        // eval_last_entry_2(numbers_game, 4);
+        // eval_last_entry_2(numbers_game, 5);
+        // eval_last_entry_2(numbers_game, 6);
+        // System.out.println(numbers_game);
+        
+        long startTime = System.nanoTime();
+        System.out.println(grow_list(numbers_game, 30 * 1000 *10));
+        long endTime = System.nanoTime();
+        long timeElapsed = endTime - startTime;
+        double sek = timeElapsed/1000000;
+        System.out.println(sek);
     }
 }
