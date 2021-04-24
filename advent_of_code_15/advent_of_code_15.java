@@ -91,14 +91,14 @@ public class advent_of_code_15 {
     public static void eval_last_entry_2(LinkedHashMap<Integer, Integer> numbers_game, int last_index) {
         int last_val = numbers_game.get(last_index);
         numbers_game.remove(last_index);
-        if (numbers_game.values().contains(last_val) == true) { // <<--------- langsam
+        if (numbers_game.values().contains(last_val) == true) { // <<--------- langsam, vertausche key und value in der map, containskey ist O(1)!
             int prev_index = 0;
-            for (Map.Entry<Integer, Integer> entry : numbers_game.entrySet()) {
-                if (entry.getValue().equals(last_val)) {
-                    prev_index = entry.getKey();
-                    break;
-                }
-            }
+            // for (Map.Entry<Integer, Integer> entry : numbers_game.entrySet()) {
+            //     if (entry.getValue().equals(last_val)) {
+            //         prev_index = entry.getKey();
+            //         break;
+            //     }
+            // }
             numbers_game.put(last_index, last_val);
             numbers_game.put(last_index+1, last_index-prev_index);
             numbers_game.remove(prev_index);
@@ -133,18 +133,18 @@ public class advent_of_code_15 {
         // LinkedHashMapRecursion(0, 2020, dictionary);
         //---------------------------part2---------------------------
         LinkedHashMap<Integer, Integer> numbers_game = create_dict(input_array);
-        // eval_last_entry_2(numbers_game, 2);
+        eval_last_entry_2(numbers_game, 2);
         // eval_last_entry_2(numbers_game, 3);
         // eval_last_entry_2(numbers_game, 4);
         // eval_last_entry_2(numbers_game, 5);
         // eval_last_entry_2(numbers_game, 6);
         // System.out.println(numbers_game);
         
-        long startTime = System.nanoTime();
-        System.out.println(grow_list(numbers_game, 30 * 1000 *10));
-        long endTime = System.nanoTime();
-        long timeElapsed = endTime - startTime;
-        double sek = timeElapsed/1000000;
-        System.out.println(sek);
+        // long startTime = System.nanoTime();
+        // System.out.println(grow_list(numbers_game, 30 * 1000 *10));
+        // long endTime = System.nanoTime();
+        // long timeElapsed = endTime - startTime;
+        // double sek = timeElapsed/1000000;
+        // System.out.println(sek);
     }
 }
