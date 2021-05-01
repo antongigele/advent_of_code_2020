@@ -8,8 +8,9 @@ public class advent_of_code_15 {
 
     public static String readFileAsString(String path) {
         File input_file = new File(path);
+        Scanner reader = null;
         try {
-            Scanner reader = new Scanner(input_file);
+            reader = new Scanner(input_file);
             while (reader.hasNextLine()) {
                 String data = reader.nextLine();
                 return data;
@@ -20,6 +21,11 @@ public class advent_of_code_15 {
             e.printStackTrace();
             return "File not found";
         }
+        finally {
+            if (reader != null) {
+                reader.close();
+            }
+        }    
         return "0";
     }
 

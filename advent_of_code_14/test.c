@@ -36,48 +36,65 @@ static void string_arr(char *p[]) {
     p[1] = "World!";
 }
 
-static void read_in_arr(char *input[], char *path) {
-
-    FILE *fptr = NULL; 
-    int i = 0;
-    int tot = 0;	
-    int F_ROWS = count_file_len(path);
-    char line[F_ROWS][MAXCHAR];
+static void read_in_arr(char *input_arr[], char *path) {
+    // input_arr[0] = "fuck em";
+    FILE* fptr = NULL; 
     fptr = fopen(path, "r");
-    while(fgets(line[i], MAXCHAR, fptr)) {
-        if (line[i][strlen(line[i])-1] == '0') {
-            line[i][strlen(line[i])] = '\0';
+    int i = 0;
+    while(fgets(input_arr[i], MAXCHAR, fptr)) {
+        if (input_arr[i][strlen(input_arr[i])-1] == '0') {
+            input_arr[i][strlen(input_arr[i])] = '\0';
             i++;
         }
         else {
-            line[i][strlen(line[i])-1] = '\0';
+            input_arr[i][strlen(input_arr[i])-1] = '\0';
             i++;
         }
     }
 }
 
+// static void read_in_arr(char *input_arr, char *path) {
+//     FILE* fptr = NULL; 
+//     fptr = fopen(path, "r");
+//     int i = 0;
+//     while(fgets(input_arr[i], MAXCHAR, fptr)) {
+//         if (input_arr[i * strlen(input_arr[i])-1] == '0') {
+//             input_arr[i][strlen(input_arr[i])] = '\0';
+//             i++;
+//         }
+//         else {
+//             input_arr[i][strlen(input_arr[i])-1] = '\0';
+//             i++;
+//         }
+//     }
+// }
+
 int main() {
+    // int len = count_file_len("advent_of_code_14.txt");
+    // char *input_arr[len];
+    // read_in_arr(input_arr, "advent_of_code_14.txt");
+    // printf("%s\n", input_arr[0]);
+    // for (int i = 0; i < len-1; i++) {
+    //     printf("%s\n", input_arr[i]);
+    // }
 
-    char *strings[2];
-    string_arr(strings);
-    printf("%s %s\n", strings[0], strings[1]);
-
+//-----------------die funktion oben aufrufen
+    // char *strings[2];
+    // string_arr(strings);
+    // printf("%s %s\n", strings[0], strings[1]);
+//-----------------array element und seine adresse ausgeben
     // int i;
-
     // char ch_arr[3][10] = {
     //                          "spike",
     //                          "tom",
     //                          "jerry"
     //                      };
 
-    // printf("1st way \n\n");
-
-    // for(i = 0; i < 3; i++)
+    // for(int i = 0; i < 3; i++)
     // {
-    //     printf("string = %s \t address = %u\n", ch_arr + i, ch_arr + i);
+    //     printf("string = %s \t address = %u \n", ch_arr[i], *ch_arr[i]);
     // }
-
-
+//------------------------string array wird ausgeben---------------------------------
     // char input[5][100] = {"element0", "element2", "element4", "element6", "element8"};
 
     // int i;
@@ -86,7 +103,7 @@ int main() {
     // {
     //     printf("%s\n", input[i]);
     // }
-
+//------------------------das sollte in eine funktion verpackt sein
     char fname[MAXCHAR];
     FILE *fptr = NULL; 
     int i = 0;
